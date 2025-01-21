@@ -3,7 +3,7 @@
 --- MOD_ID: ari_core
 --- MOD_AUTHOR: [Aurif]
 --- MOD_DESCRIPTION: A library for an object-oriented approach to modding balatro
---- BADGE_COLOUR: 18cadc
+--- BADGE_COLOUR: 2a004b
 --- DISPLAY_NAME: Ari's Balatro (modding) Core
 --- PREFIX: ari_core
 --- VERSION: 0.0.1
@@ -11,6 +11,8 @@
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
+
+SMODS.load_file("utils.lua")()
 
 ABC = {}
 SMODS.load_file("base/joker.lua")()

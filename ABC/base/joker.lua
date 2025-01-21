@@ -10,7 +10,7 @@ local JOKER_DEFAULTS = {
 }
 
 function ABC.Joker:new(name)
-    local o = { raw = JOKER_DEFAULTS, meta = {} }
+    local o = { raw = copy_table(JOKER_DEFAULTS), meta = {} }
     setmetatable(o, self)
     self.__index = self
     o:__init__(name)
@@ -20,6 +20,7 @@ end
 function ABC.Joker:register()
     self:_setup_default_sprite()
     self:_substitute_description_vars()
+    self:_validate()
     SMODS.Joker(self.raw)
 end
 
@@ -38,6 +39,36 @@ end
 
 function ABC.Joker:credit_original_art(artist)
     table.insert(self.raw.loc_txt.text, "{C:inactive}Original art by {C:green,E:1,S:1.1}" .. artist)
+    return self
+end
+
+--
+-- Rarities
+--
+function ABC.Joker:rarity_common()
+    if not self.raw.cost then
+        self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self:get_full_name())
+    end
+    self.raw.rarity = 1
+
+    return self
+end
+
+function ABC.Joker:rarity_uncommon()
+    if not self.raw.cost then
+        self.raw.cost = random_choice({ 5, 6, 7 }, self:get_full_name())
+    end
+    self.raw.rarity = 2
+
+    return self
+end
+
+function ABC.Joker:rarity_rare()
+    if not self.raw.cost then
+        self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self:get_full_name())
+    end
+    self.raw.rarity = 3
+
     return self
 end
 
@@ -70,6 +101,46 @@ function ABC.Joker:calculate(calculate)
 end
 
 --
+-- Debug functions
+--
+function ABC.Joker:debug_force_in_shop()
+    local joker_key = self:get_full_name()
+    local old_Controller_snap_to = Controller.snap_to
+    function Controller:snap_to(args)
+        local in_shop_load = G["shop"] and args["node"] and
+                             (args.node == G.shop:get_UIE_by_ID('next_round_button') or
+                              args.node["area"] and args.node.area["config"] and args.node.area.config.type == "shop")
+        if in_shop_load then
+            local joker_already_in_shop = false
+            for _, card in pairs(G.shop_vouchers.cards) do
+                if card.config.center_key == joker_key then
+                    joker_already_in_shop = true
+                end
+            end
+
+            if not joker_already_in_shop then
+                local card = create_card('Joker', G.shop_vouchers, nil, 1, nil, nil, joker_key, nil)
+                card.base_cost = 0
+                card.cost = 0
+                create_shop_card_ui(card, 'Joker', G.shop_vouchers)
+                card.states.visible = nil
+                G.shop_vouchers:emplace(card)
+                G.shop_vouchers.config.card_limit = #G.shop_vouchers.cards
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_materialize({ HEX("2a004b") })
+                        return true
+                    end
+                }))
+            end
+        end
+        return old_Controller_snap_to(self, args)
+    end
+
+    return self
+end
+
+--
 -- Utilities
 --
 function ABC.Joker:get_full_name()
@@ -92,10 +163,28 @@ function ABC.Joker:_setup_default_sprite()
 end
 
 function ABC.Joker:_substitute_description_vars()
+    if not self.raw.loc_txt or not self.raw.loc_txt.text then
+        return
+    end
     for i, line in pairs(self.raw.loc_txt.text) do
         for j, k in pairs(self.meta.var_order) do
             line = line:gsub("#" .. k .. "#", "#" .. j .. "#")
         end
         self.raw.loc_txt.text[i] = line
+    end
+end
+
+function ABC.Joker:_validate()
+    local errors = {  }
+    if not self.raw.rarity then table.insert(errors, "missing rarity") end
+    if not self.raw.cost then table.insert(errors, "missing cost") end
+    --if self.raw.loc_txt == nil or self.raw.loc_txt.text == nil then table.insert(errors, "missing description") end
+    if #errors > 0 then
+        local register_traceback = debug.traceback():match("^[^\n]*\n[^\n]*\n[^\n]*\n%s*([^\n]*)")
+        local error_message = register_traceback .. "\nTried registering invalid joker"
+        for _, err in pairs(errors) do
+            error_message = error_message .. "\n  - " .. err
+        end
+        error(error_message)
     end
 end
