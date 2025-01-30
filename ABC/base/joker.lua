@@ -76,6 +76,13 @@ end
 -- Functionality
 --
 function ABC.Joker:variables(vars)
+    self.meta.var_wrappers = {}
+    for k, v in pairs(vars) do
+        if type(v) == "table" and v.value ~= nil then
+            self.meta.var_wrappers[k] = getmetatable(v)
+            vars[k] = v.value
+        end
+    end
     self.raw.config = {
         extra = vars
     }
@@ -85,10 +92,22 @@ function ABC.Joker:variables(vars)
         table.insert(var_order, k)
     end
     self.meta.var_order = var_order
-    self.raw.loc_vars = function(self, info_queue, card)
+    self.raw.loc_vars = function(_, info_queue, card)
         local loc_vars = {}
         for _, k in pairs(var_order) do
-            table.insert(loc_vars, card.ability.extra[k])
+            if self.meta.var_wrappers[k] and self.meta.var_wrappers[k]._localize then
+                local wrapper = self.meta.var_wrappers[k]
+                local localization = wrapper:new(card.ability.extra[k]):_localize()
+                table.insert(loc_vars, localization.text)
+                for extra_k, extra_v in pairs(localization.extra or {}) do
+                    if not loc_vars[extra_k] then
+                        loc_vars[extra_k] = {}
+                    end
+                    table.insert(loc_vars[extra_k], extra_v)
+                end
+            else
+                table.insert(loc_vars, card.ability.extra[k])
+            end
         end
         return { vars = loc_vars }
     end
