@@ -13,8 +13,18 @@ ABC.Joker:new("Checkered Joker")
     if context.setting_blind and not self.getting_sliced then
         card.ability.extra.suit = ABC.VARS.Suit:random(pseudoseed('checkered'..G.GAME.round_resets.ante)).value
     end
-    if context.individual and context.cardarea == G.play and not context.blueprint then
-        context.other_card:change_suit(card.ability.extra.suit)
+    if context.after and context.scoring_hand and not context.blueprint then
+        for i = 1, #context.scoring_hand do
+            local other_card = context.scoring_hand[i]
+            if other_card.base.suit ~= card.ability.extra.suit then
+                ABC.Animations.modify_card(
+                        function()
+                            other_card:change_suit(card.ability.extra.suit)
+                        end,
+                        other_card, card
+                )
+            end
+        end
     end
   end)
   :register()

@@ -21,5 +21,7 @@ SMODS.load_file("base/vars/suit.lua")()
 SMODS.load_file("base/joker.lua")()
 SMODS.load_file("extensions/joker-evolution.lua")()
 
+SMODS.load_file("base/animations.lua")()
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
