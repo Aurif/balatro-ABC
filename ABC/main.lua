@@ -16,6 +16,8 @@ SMODS.load_file("utils.lua")()
 
 ABC = {}
 ABC.VARS = {}
+SMODS.load_file("base/vars/enhancement.lua")()
+SMODS.load_file("base/vars/probability.lua")()
 SMODS.load_file("base/vars/suit.lua")()
 
 SMODS.load_file("base/joker.lua")()

@@ -18,10 +18,10 @@ ABC.Joker:new("Checkered Joker")
             local other_card = context.scoring_hand[i]
             if other_card.base.suit ~= card.ability.extra.suit then
                 ABC.Animations.modify_card(
-                        function()
-                            other_card:change_suit(card.ability.extra.suit)
-                        end,
-                        other_card, card
+                    function()
+                        other_card:change_suit(card.ability.extra.suit)
+                    end,
+                    other_card, card
                 )
             end
         end
