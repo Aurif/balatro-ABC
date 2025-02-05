@@ -8,7 +8,7 @@ function ABC.Joker:evolution_of(other_joker, max_amount, carryover, description)
         sendDebugMessage('Installing "Joker Evolution" mod will provide additional content')
         return self
     end
-    JokerEvolution.evolutions:add_evolution(other_joker, self:get_full_name(), max_amount, carryover)
+    JokerEvolution.evolutions:add_evolution(other_joker, self.meta.full_name, max_amount, carryover)
     self.meta.evolution_of = other_joker
     self.raw.rarity = "evo"
     if SMODS.Jokers[other_joker] and SMODS.Jokers[other_joker].cost then

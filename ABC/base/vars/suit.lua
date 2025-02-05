@@ -30,3 +30,11 @@ function ABC.VARS.Suit:random(seed)
     end
     return ABC.VARS.Suit:new(pseudorandom_element(valid_suits, seed))
 end
+
+function ABC.VARS.Suit:card_set(card)
+    card:change_suit(self.value)
+end
+
+function ABC.VARS.Suit:card_is_exactly(card)
+    return card.base.suit == self.value
+end

@@ -47,7 +47,7 @@ end
 --
 function ABC.Joker:rarity_common()
     if not self.raw.cost then
-        self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self:get_full_name())
+        self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self.meta.full_name)
     end
     self.raw.rarity = 1
 
@@ -56,7 +56,7 @@ end
 
 function ABC.Joker:rarity_uncommon()
     if not self.raw.cost then
-        self.raw.cost = random_choice({ 5, 6, 7 }, self:get_full_name())
+        self.raw.cost = random_choice({ 5, 6, 7 }, self.meta.full_name)
     end
     self.raw.rarity = 2
 
@@ -65,7 +65,7 @@ end
 
 function ABC.Joker:rarity_rare()
     if not self.raw.cost then
-        self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self:get_full_name())
+        self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self.meta.full_name)
     end
     self.raw.rarity = 3
 
@@ -115,7 +115,10 @@ function ABC.Joker:variables(vars)
 end
 
 function ABC.Joker:calculate(calculate)
-    self.raw.calculate = calculate
+    self.raw.calculate = function(calc_self, card, context)
+        local ABCU = ABC._CalculateUtilJoker:new(card, context, self)
+        return calculate(calc_self, card, context, ABCU)
+    end
     return self
 end
 
@@ -123,7 +126,7 @@ end
 -- Debug functions
 --
 function ABC.Joker:debug_force_in_shop()
-    local joker_key = self:get_full_name()
+    local joker_key = self.meta.full_name
     local old_Controller_snap_to = Controller.snap_to
     function Controller:snap_to(args)
         local in_shop_load = G["shop"] and args["node"] and
@@ -160,24 +163,18 @@ function ABC.Joker:debug_force_in_shop()
 end
 
 --
--- Utilities
---
-function ABC.Joker:get_full_name()
-    return "j_" .. SMODS.current_mod.prefix .. "_" .. self.raw.key
-end
-
---
 -- Internal
 --
 
 function ABC.Joker:__init__(name)
     self.raw.name = name
     self.raw.key = string.gsub(string.lower(name), "%W", "_")
+    self.meta.full_name = "j_" .. SMODS.current_mod.prefix .. "_" .. self.raw.key
 end
 
 function ABC.Joker:_setup_default_sprite()
     self.raw.pos = { x = 0, y = 0 }
-    self.raw.atlas = self:get_full_name()
+    self.raw.atlas = self.meta.full_name
     SMODS.Sprite:new(self.raw.atlas, SMODS.current_mod.path, self.raw.atlas .. ".png", 71, 95, "asset_atli"):register()
 end
 
