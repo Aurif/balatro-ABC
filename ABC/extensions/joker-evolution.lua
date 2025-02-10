@@ -3,6 +3,9 @@
 --- DateTime: 15/01/2025 22:35
 ---
 
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:evolution_of(other_joker, max_amount, carryover, description)
     if not SMODS.Mods['joker_evolution'] then
         sendDebugMessage('Installing "Joker Evolution" mod will provide additional content')
@@ -30,6 +33,9 @@ function ABC.Joker:evolution_of(other_joker, max_amount, carryover, description)
     return self
 end
 
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:evolution_calculate(calculate)
     if not SMODS.Mods['joker_evolution'] then
         return self

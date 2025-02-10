@@ -8,8 +8,8 @@ local JOKER_DEFAULTS = {
 }
 
 ---@class ABC.Joker
-local Joker = class()
-ABC.Joker = Joker
+---@overload fun(name: string): ABC.Joker
+ABC.Joker = class()
 
 function ABC.Joker:register()
     self:_setup_default_sprite()
@@ -21,6 +21,10 @@ end
 --
 -- Localization
 --
+
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:description(description)
     if not self.raw.loc_txt then
         self.raw.loc_txt = {
@@ -31,6 +35,9 @@ function ABC.Joker:description(description)
     return self
 end
 
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:credit_original_art(artist)
     table.insert(self.raw.loc_txt.text, "{C:inactive}Original art by {C:green,E:1,S:1.1}" .. artist)
     return self
@@ -39,6 +46,10 @@ end
 --
 -- Rarities
 --
+
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:rarity_common()
     if not self.raw.cost then
         self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self.meta.full_name)
@@ -48,6 +59,9 @@ function ABC.Joker:rarity_common()
     return self
 end
 
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:rarity_uncommon()
     if not self.raw.cost then
         self.raw.cost = random_choice({ 5, 6, 7 }, self.meta.full_name)
@@ -57,6 +71,9 @@ function ABC.Joker:rarity_uncommon()
     return self
 end
 
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:rarity_rare()
     if not self.raw.cost then
         self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self.meta.full_name)
@@ -69,6 +86,10 @@ end
 --
 -- Functionality
 --
+
+---@generic V
+---@param vars V
+---@return ABC.Joker|{__shadow_var_types: V} self for chaining
 function ABC.Joker:variables(vars)
     self.meta.var_wrappers = {}
     for k, v in pairs(vars) do
@@ -108,6 +129,10 @@ function ABC.Joker:variables(vars)
     return self
 end
 
+---@generic V
+---@param self ABC.Joker|{__shadow_var_types: V}
+---@param calculate fun(self, card, context, ABCU: ABC.CalculateUtilJoker|{vars: V}): any
+---@return ABC.Joker|{__shadow_var_types: V} self for chaining
 function ABC.Joker:calculate(calculate)
     self.raw.calculate = function(calc_self, card, context)
         local ABCU = ABC._CalculateUtilJoker(card, context, self)
@@ -119,6 +144,10 @@ end
 --
 -- Debug functions
 --
+
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining
 function ABC.Joker:debug_force_in_shop()
     local joker_key = self.meta.full_name
     local old_Controller_snap_to = Controller.snap_to
@@ -153,6 +182,7 @@ function ABC.Joker:debug_force_in_shop()
         return old_Controller_snap_to(self, args)
     end
 
+    ---@cast self J
     return self
 end
 

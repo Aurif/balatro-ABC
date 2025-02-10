@@ -4,8 +4,9 @@
 ---
 
 ---@class ABC.VARS.Suit
-local Suit = classABCVar()
-ABC.VARS.Suit = Suit
+---@field value string
+---@overload fun(value: string): ABC.VARS.Suit
+ABC.VARS.Suit = classABCVar()
 
 function ABC.VARS.Suit:random(seed)
     local valid_suits = {}

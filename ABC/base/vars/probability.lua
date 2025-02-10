@@ -4,8 +4,9 @@
 ---
 
 ---@class ABC.VARS.Probability
-local Probability = classABCVar()
-ABC.VARS.Probability = Probability
+---@field value number
+---@overload fun(value: number): ABC.VARS.Probability
+ABC.VARS.Probability = classABCVar()
 
 function ABC.VARS.Probability:triggers()
     return pseudorandom('probability_seed') < G.GAME.probabilities.normal / self.value

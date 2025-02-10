@@ -16,10 +16,10 @@ ABC.Joker("Checkered Joker")
     if context.after and context.scoring_hand and not context.blueprint then
         for i = 1, #context.scoring_hand do
             local other_card = context.scoring_hand[i]
-            if not ABCU:var_get("suit"):card_is_exactly(other_card) then
+            if not ABCU.vars.suit:card_is_exactly(other_card) then
                 ABC.Animations.modify_card(
                     function()
-                        ABCU:var_get("suit"):card_set(other_card)
+                        ABCU.vars.suit:card_set(other_card)
                     end,
                     other_card, card
                 )

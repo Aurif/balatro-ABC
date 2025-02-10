@@ -4,8 +4,7 @@
 ---
 
 ---@class ABC.Animations
-local Animations = class()
-ABC.Animations = Animations
+ABC.Animations = class()
 
 --
 -- Utilities

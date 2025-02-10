@@ -14,10 +14,10 @@ ABC.Joker("Electrician")
     if context.after and context.scoring_hand and not context.blueprint then
         for i = 1, #context.scoring_hand do
             local other_card = context.scoring_hand[i]
-            if ABCU:var_get("probability"):triggers() then
+            if ABCU.vars.probability:triggers() then
                 ABC.Animations.modify_card(
                     function()
-                        ABCU:var_get("enhancement"):card_set(other_card)
+                        ABCU.vars.enhancement:card_set(other_card)
                     end,
                     other_card, card
                 )
