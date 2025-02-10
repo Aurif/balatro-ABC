@@ -3,11 +3,11 @@
 --- DateTime: 04/02/2025 21:00
 ---
 
-ABC.Joker:new("Electrician")
+ABC.Joker("Electrician")
   :description({"Scored cards have {C:green,E:1,S:1.1}#probability#{}", "chance to become a {C:attention}#enhancement#{}", "(replaces current enhancement)"})
   :variables({
-    enhancement=ABC.VARS.Enhancement:new("m_snow_platinum_card"),
-    probability=ABC.VARS.Probability:new(4)
+    enhancement=ABC.VARS.Enhancement("m_snow_platinum_card"),
+    probability=ABC.VARS.Probability(4)
   })
   :rarity_rare()
   :calculate(function(_, card, context, ABCU)
@@ -25,4 +25,5 @@ ABC.Joker:new("Electrician")
         end
     end
   end)
+  :debug_force_in_shop()
   :register()

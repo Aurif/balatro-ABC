@@ -3,23 +3,9 @@
 --- DateTime: 30/01/2025 22:08
 ---
 
-ABC.VARS.Suit = {}
-
-function ABC.VARS.Suit:new(value)
-    local o = { value = value }
-    setmetatable(o, self)
-    self.__index = self
-    return o
-end
-
-function ABC.VARS.Suit:_localize()
-    return {
-        text=localize(self.value, 'suits_plural'),
-        extra={
-            colours=G.C.SUITS[self.value]
-        }
-    }
-end
+---@class ABC.VARS.Suit
+local Suit = classABCVar()
+ABC.VARS.Suit = Suit
 
 function ABC.VARS.Suit:random(seed)
     local valid_suits = {}
@@ -28,7 +14,7 @@ function ABC.VARS.Suit:random(seed)
             table.insert(valid_suits, v.name)
         end
     end
-    return ABC.VARS.Suit:new(pseudorandom_element(valid_suits, seed))
+    return ABC.VARS.Suit(pseudorandom_element(valid_suits, seed))
 end
 
 function ABC.VARS.Suit:card_set(card)
@@ -37,4 +23,14 @@ end
 
 function ABC.VARS.Suit:card_is_exactly(card)
     return card.base.suit == self.value
+end
+
+---@private
+function ABC.VARS.Suit:_localize()
+    return {
+        text=localize(self.value, 'suits_plural'),
+        extra={
+            colours=G.C.SUITS[self.value]
+        }
+    }
 end

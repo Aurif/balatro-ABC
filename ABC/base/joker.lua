@@ -2,20 +2,14 @@
 --- Created by Aurif.
 --- DateTime: 14/01/2025 22:55
 ---
-ABC.Joker = {}
-
 local JOKER_DEFAULTS = {
     blueprint_compat = true,
     eternal_compat = true
 }
 
-function ABC.Joker:new(name)
-    local o = { raw = copy_table(JOKER_DEFAULTS), meta = {} }
-    setmetatable(o, self)
-    self.__index = self
-    o:__init__(name)
-    return o
-end
+---@class ABC.Joker
+local Joker = class()
+ABC.Joker = Joker
 
 function ABC.Joker:register()
     self:_setup_default_sprite()
@@ -97,7 +91,7 @@ function ABC.Joker:variables(vars)
         for _, k in pairs(var_order) do
             if self.meta.var_wrappers[k] and self.meta.var_wrappers[k]._localize then
                 local wrapper = self.meta.var_wrappers[k]
-                local localization = wrapper:new(card.ability.extra[k]):_localize()
+                local localization = wrapper(card.ability.extra[k]):_localize()
                 table.insert(loc_vars, localization.text)
                 for extra_k, extra_v in pairs(localization.extra or {}) do
                     if not loc_vars[extra_k] then
@@ -116,7 +110,7 @@ end
 
 function ABC.Joker:calculate(calculate)
     self.raw.calculate = function(calc_self, card, context)
-        local ABCU = ABC._CalculateUtilJoker:new(card, context, self)
+        local ABCU = ABC._CalculateUtilJoker(card, context, self)
         return calculate(calc_self, card, context, ABCU)
     end
     return self
@@ -166,18 +160,23 @@ end
 -- Internal
 --
 
+---@private
 function ABC.Joker:__init__(name)
+    self.raw = copy_table(JOKER_DEFAULTS)
+    self.meta = {}
     self.raw.name = name
     self.raw.key = string.gsub(string.lower(name), "%W", "_")
     self.meta.full_name = "j_" .. SMODS.current_mod.prefix .. "_" .. self.raw.key
 end
 
+---@private
 function ABC.Joker:_setup_default_sprite()
     self.raw.pos = { x = 0, y = 0 }
     self.raw.atlas = self.meta.full_name
     SMODS.Sprite:new(self.raw.atlas, SMODS.current_mod.path, self.raw.atlas .. ".png", 71, 95, "asset_atli"):register()
 end
 
+---@private
 function ABC.Joker:_substitute_description_vars()
     if not self.raw.loc_txt or not self.raw.loc_txt.text then
         return
@@ -190,6 +189,7 @@ function ABC.Joker:_substitute_description_vars()
     end
 end
 
+---@private
 function ABC.Joker:_validate()
     local errors = {  }
     if not self.raw.rarity then table.insert(errors, "missing rarity") end

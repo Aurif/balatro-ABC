@@ -3,10 +3,10 @@
 --- DateTime: 20/01/2025 23:00
 ---
 
-ABC.Joker:new("Checkered Joker")
+ABC.Joker("Checkered Joker")
   :description({"All scored cards become", "{V:1}#suit#{}, suit changes", "every round"})
   :variables({
-      suit = ABC.VARS.Suit:new('Spades'),
+      suit = ABC.VARS.Suit('Spades'),
   })
   :rarity_common()
   :calculate(function(self, card, context, ABCU)
@@ -27,4 +27,5 @@ ABC.Joker:new("Checkered Joker")
         end
     end
   end)
+  :debug_force_in_shop()
   :register()

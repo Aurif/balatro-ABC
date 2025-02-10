@@ -25,7 +25,7 @@ function tally_letters(card, context)
 end
   
 
-ABC.Joker:new("J-Chart")
+ABC.Joker("J-Chart")
   :description({"Gives {C:chips}+#chips#{} Chips for every", "letter {C:attention}\"#letter#\"{} in your Jokers", "Increases by {C:chips}#increment#{} for each", "scored letter"})
   :credit_original_art("Grassy")
   :variables({

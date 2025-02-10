@@ -3,7 +3,9 @@
 --- DateTime: 03/02/2025 20:52
 ---
 
-
+---@class ABC.Animations
+local Animations = class()
+ABC.Animations = Animations
 
 --
 -- Utilities
@@ -17,8 +19,6 @@ end
 --
 -- Animations
 --
-ABC.Animations = {}
-
 function ABC.Animations.modify_card(callback, card, joker_card)
     event({ trigger = 'after', delay = 0.15,
         func = function()
