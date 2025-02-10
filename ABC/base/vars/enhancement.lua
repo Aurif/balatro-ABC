@@ -12,6 +12,10 @@ function ABC.VARS.Enhancement:card_set(card)
     card:set_ability(G.P_CENTERS[self.value])
 end
 
+function ABC.VARS.Enhancement:card_is(card)
+    return card.config.center.key == self.value
+end
+
 ---@private
 function ABC.VARS.Enhancement:_localize()
     return {

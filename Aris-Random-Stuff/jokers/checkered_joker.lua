@@ -27,5 +27,4 @@ ABC.Joker("Checkered Joker")
         end
     end
   end)
-  :debug_force_in_shop()
   :register()
