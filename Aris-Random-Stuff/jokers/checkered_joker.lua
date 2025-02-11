@@ -11,7 +11,7 @@ ABC.Joker("Checkered Joker")
   :rarity_common()
   :calculate(function(self, card, context, ABCU)
     if context.setting_blind and not self.getting_sliced then
-        card.ability.extra.suit = ABC.VARS.Suit:random(pseudoseed('checkered'..G.GAME.round_resets.ante)).value
+        ABCU.vars.suit = ABC.VARS.Suit:random(pseudoseed('checkered'..G.GAME.round_resets.ante))
     end
     if context.after and context.scoring_hand and not context.blueprint then
         for i = 1, #context.scoring_hand do

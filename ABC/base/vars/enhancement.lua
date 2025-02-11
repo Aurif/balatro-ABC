@@ -6,7 +6,7 @@
 ---@class ABC.VARS.Enhancement
 ---@field value string
 ---@overload fun(value: string): ABC.VARS.Enhancement
-ABC.VARS.Enhancement = classABCVar()
+ABC.VARS.Enhancement = classABCVar("Enhancement")
 
 function ABC.VARS.Enhancement:card_set(card)
     card:set_ability(G.P_CENTERS[self.value])

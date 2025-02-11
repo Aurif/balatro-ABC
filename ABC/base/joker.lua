@@ -93,7 +93,7 @@ end
 function ABC.Joker:variables(vars)
     self.meta.var_wrappers = {}
     for k, v in pairs(vars) do
-        if type(v) == "table" and v.value ~= nil then
+        if type(v) == "table" and getmetatable(v).__is_abc_var then
             self.meta.var_wrappers[k] = getmetatable(v)
             vars[k] = v.value
         end

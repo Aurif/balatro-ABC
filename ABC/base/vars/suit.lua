@@ -6,7 +6,7 @@
 ---@class ABC.VARS.Suit
 ---@field value string
 ---@overload fun(value: string): ABC.VARS.Suit
-ABC.VARS.Suit = classABCVar()
+ABC.VARS.Suit = classABCVar("Suit")
 
 function ABC.VARS.Suit:random(seed)
     local valid_suits = {}

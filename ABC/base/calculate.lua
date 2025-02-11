@@ -32,6 +32,25 @@ function ABC._CalculateUtilJoker:_init_vars()
         end
         return self.joker_card.ability.extra[varname]
     end
+    vars_meta.__newindex = function(_, varname, value)
+        if self.joker_card.ability.extra[varname] == nil then
+            error("Joker " ..
+            self.joker_definition.meta.full_name .. " tried setting unregistered variable '" .. varname .. "'")
+        end
+        local var_wrapper = self.joker_definition.meta.var_wrappers[varname]
+        if var_wrapper and getmetatable(value) ~= var_wrapper then
+            error(
+                "Joker " .. self.joker_definition.meta.full_name
+                .. " tried setting variable '" .. varname .. "' to a wrong type,"
+                .. " expected " .. var_wrapper.__name
+                .. " but got " .. tostring(value)
+            )
+        end
+        if value.value then
+            value = value.value
+        end
+        self.joker_card.ability.extra[varname] = value
+    end
 
     self.vars = {}
     setmetatable(self.vars, vars_meta)
