@@ -7,103 +7,43 @@ local JOKER_DEFAULTS = {
     eternal_compat = true
 }
 
+---
+--- Base
+---
+
 ---@class ABC.Joker
+---Starts definition of a new joker.\
+---Must be ended with `:register()` to have any effect. Sprites for the joker must be placed in `assets/1x/j_<mod_prefix>_<name>.png` and `assets/2x/j_<mod_prefix>_<name>.png` (so, if joker's name is "Checkered Joker" and mod's prefix is "ari_rand", the path will be `assets/1x/j_ari_rand_checkered_joker.png`).
+---***
+---\@*param* `name` — In-game name of the joker.
+---
+---\@*return* `joker` — start of chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 ---@overload fun(name: string): ABC.Joker
 ABC.Joker = class()
 
-function ABC.Joker:register()
-    self:_setup_default_sprite()
-    self:_substitute_description_vars()
-    self:_validate()
-    SMODS.Joker(self.raw)
-end
-
---
--- Localization
---
-
----@generic J: ABC.Joker
----@param self J
----@return J self for chaining
-function ABC.Joker:description(description)
-    if not self.raw.loc_txt then
-        self.raw.loc_txt = {
-            name = self.raw.name
-        }
-    end
-    self.raw.loc_txt.text = description
-    return self
-end
-
----@generic J: ABC.Joker
----@param self J
----@return J self for chaining
-function ABC.Joker:credit_original_art(artist)
-    table.insert(self.raw.loc_txt.text, "{C:inactive}Original art by {C:green,E:1,S:1.1}" .. artist)
-    return self
-end
-
---
--- Rarities
---
-
----@generic J: ABC.Joker
----@param self J
----@return J self for chaining
-function ABC.Joker:rarity_common()
-    if not self.raw.cost then
-        self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self.meta.full_name)
-    end
-    self.raw.rarity = 1
-
-    return self
-end
-
----@generic J: ABC.Joker
----@param self J
----@return J self for chaining
-function ABC.Joker:rarity_uncommon()
-    if not self.raw.cost then
-        self.raw.cost = random_choice({ 5, 6, 7 }, self.meta.full_name)
-    end
-    self.raw.rarity = 2
-
-    return self
-end
-
----@generic J: ABC.Joker
----@param self J
----@return J self for chaining
-function ABC.Joker:rarity_rare()
-    if not self.raw.cost then
-        self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self.meta.full_name)
-    end
-    self.raw.rarity = 3
-
-    return self
-end
-
---
--- Functionality
---
-
----@generic V
----@param vars V
----@return ABC.Joker|{__shadow_var_types: V} self for chaining
-function ABC.Joker:variables(vars)
+---Defines joker's variable types and initial values.
+---***
+---@generic V : {[string]: string|number|ABC.VAR}
+---@param variables V A dictionary, with keys being variable names, and values being their initial values. When dealing with variables that aren't numbers or strings it is <u>highly recommended</u> to use ABC's variable classes.
+---@return ABC.Joker|{__shadow_var_types: V} self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
+function ABC.Joker:variables(variables)
     self.meta.var_wrappers = {}
-    for k, v in pairs(vars) do
+    for k, v in pairs(variables) do
         if type(v) == "table" and getmetatable(v).__is_abc_var then
             self.meta.var_wrappers[k] = getmetatable(v)
-            vars[k] = v.value
+            variables[k] = v.value
         end
     end
     self.raw.config = {
-        extra = vars
+        extra = variables
     }
 
     local var_order = {}
-    for k, _ in pairs(vars) do
+    for k, _ in pairs(variables) do
         table.insert(var_order, k)
     end
     self.meta.var_order = var_order
@@ -129,10 +69,33 @@ function ABC.Joker:variables(vars)
     return self
 end
 
+---Sets joker's in-game description.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@param description string[] In-game description, with each list element being a new line. Variable values can be inserted by using `#variable_name#`.
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
+function ABC.Joker:description(description)
+    if not self.raw.loc_txt then
+        self.raw.loc_txt = {
+            name = self.raw.name
+        }
+    end
+    self.raw.loc_txt.text = description
+    return self
+end
+
+---Defines the calculate function responsible for effects of the joker.\
+---See [Steamodded API](https://github.com/Steamodded/smods/wiki/calculate_functions) for more details on calculate functions.
+---***
 ---@generic V
 ---@param self ABC.Joker|{__shadow_var_types: V}
----@param calculate fun(self, card, context, ABCU: ABC.CalculateUtilJoker|{vars: V}): any
----@return ABC.Joker|{__shadow_var_types: V} self for chaining
+---@param calculate fun(self, card, context, ABCU: ABC.CalculateUtilJoker|{vars: V}): any The calculate function. First three parameters (`self`, `card`, `context`) correspond to the definitions from [Steamodded API](https://github.com/Steamodded/smods/wiki/calculate_functions). The fourth parameter is the CalculateUtil class provided by ABC.
+---@return ABC.Joker|{__shadow_var_types: V} self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:calculate(calculate)
     self.raw.calculate = function(calc_self, card, context)
         local ABCU = ABC._CalculateUtilJoker(card, context, self)
@@ -141,13 +104,97 @@ function ABC.Joker:calculate(calculate)
     return self
 end
 
---
--- Debug functions
---
+---Actually creates the joker.\
+---Must be used at the end of very joker definition.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
+function ABC.Joker:register()
+    self:_setup_default_sprite()
+    self:_substitute_description_vars()
+    self:_validate()
+    SMODS.Joker(self.raw)
+end
 
+---
+--- Rarities
+---
+
+---Sets rarity of the joker to **common**.\
+---If no buy price was set, sets it randomly in range [3-5].
+---***
 ---@generic J: ABC.Joker
 ---@param self J
----@return J self for chaining
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
+function ABC.Joker:rarity_common()
+    if not self.raw.cost then
+        self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self.meta.full_name)
+    end
+    self.raw.rarity = 1
+
+    return self
+end
+
+---Sets rarity of the joker to **uncommon**.\
+---If no buy price was set, sets it randomly in range [5-7].
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+function ABC.Joker:rarity_uncommon()
+    if not self.raw.cost then
+        self.raw.cost = random_choice({ 5, 6, 7 }, self.meta.full_name)
+    end
+    self.raw.rarity = 2
+
+    return self
+end
+
+---Sets rarity of the joker to **rare**.\
+---If no buy price was set, sets it randomly in range [8-10].
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
+function ABC.Joker:rarity_rare()
+    if not self.raw.cost then
+        self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self.meta.full_name)
+    end
+    self.raw.rarity = 3
+
+    return self
+end
+
+---
+--- Notes
+---
+
+---Adds a note crediting the artist of the joker's original sprite.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@param artist string Name of the artist to credit
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Evolutions/jokers/j_chart.lua)
+function ABC.Joker:credit_original_art(artist)
+    table.insert(self.raw.loc_txt.text, "{C:inactive}Original art by {C:green,E:1,S:1.1}" .. artist)
+    return self
+end
+
+---
+--- Debug functions
+---
+
+---Forces the card to always appear in the shop for the price of 0.\
+---For debugging purposes only.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
 function ABC.Joker:debug_force_in_shop()
     local joker_key = self.meta.full_name
     local old_Controller_snap_to = Controller.snap_to
@@ -186,9 +233,9 @@ function ABC.Joker:debug_force_in_shop()
     return self
 end
 
---
--- Internal
---
+---
+--- Internal
+---
 
 ---@private
 function ABC.Joker:__init__(name)

@@ -4,7 +4,7 @@
 ---
 
 ABC.Joker("Electrician")
-  :description({"Scored cards have {C:green,E:1,S:1.1}#probability#{}", "chance to become a {C:attention}#enhancement#{}", "(replaces current enhancement)"})
+  :description({"Scored cards have {C:green,E:1,S:1.1}#probability#{}", "chance to become a {C:attention}#enhancement#{}", "{s:0.8}(replaces current enhancement){}"})
   :variables({
     enhancement=ABC.VARS.Enhancement("m_snow_platinum_card"),
     probability=ABC.VARS.Probability(4)

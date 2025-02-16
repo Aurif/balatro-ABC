@@ -3,7 +3,7 @@
 --- DateTime: 04/02/2025 22:10
 ---
 
----@class ABC.VARS.Probability
+---@class ABC.VARS.Probability : ABC.VAR
 ---@field value number
 ---@overload fun(value: number): ABC.VARS.Probability
 ABC.VARS.Probability = classABCVar("Probability")

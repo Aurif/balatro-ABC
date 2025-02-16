@@ -1,3 +1,6 @@
+---@class ABC.VAR
+ABC.VAR = class()
+
 ---@param name string Name of the class, for debugging purposes
 function classABCVar(name)
     return class(

@@ -3,7 +3,7 @@
 --- DateTime: 04/02/2025 21:33
 ---
 
----@class ABC.VARS.Enhancement
+---@class ABC.VARS.Enhancement : ABC.VAR
 ---@field value string
 ---@overload fun(value: string): ABC.VARS.Enhancement
 ABC.VARS.Enhancement = classABCVar("Enhancement")
