@@ -101,6 +101,10 @@ function ABC.Joker:calculate(calculate)
         local ABCU = ABC._CalculateUtilJoker(card, context, self)
         return calculate(calc_self, card, context, ABCU)
     end
+    self.raw.calc_dollar_bonus = function(calc_self, card)
+        return self.raw.calculate(calc_self, card, {calc_dollar_bonus=true})
+    end
+
     return self
 end
 
@@ -142,6 +146,8 @@ end
 ---@generic J: ABC.Joker
 ---@param self J
 ---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/many_jokers.lua)
 function ABC.Joker:rarity_uncommon()
     if not self.raw.cost then
         self.raw.cost = random_choice({ 5, 6, 7 }, self.meta.full_name)
@@ -230,6 +236,24 @@ function ABC.Joker:debug_force_in_shop()
     end
 
     ---@cast self J
+    return self
+end
+
+---
+--- Last resort functions
+---
+
+---Directly sets value of given property.\
+---Should only be used if given functionality is missing in ABC. When using, please [report a feature request for the missing functionality](https://github.com/Aurif/balatro-ABC/issues).
+---***
+---@generic J: ABC.Joker
+---@param key string Key of the property to set.
+---@param value any Value to set the property to.
+---@param self J
+---@return J self for chaining.
+function ABC.Joker:raw_set(key, value)
+    self.raw[key] = value
+
     return self
 end
 
