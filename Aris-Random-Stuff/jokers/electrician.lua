@@ -11,18 +11,13 @@ ABC.Joker("Electrician")
   })
   :rarity_rare()
   :calculate(function(_, card, context, ABCU)
-    if context.after and context.scoring_hand and not context.blueprint then
-        for i = 1, #context.scoring_hand do
-            local other_card = context.scoring_hand[i]
-            if not ABCU.vars.enhancement:card_is_exactly(other_card) and ABCU.vars.probability:triggers() then
-                ABC.Animations.modify_card(
-                    function()
-                        ABCU.vars.enhancement:card_set(other_card)
-                    end,
-                    other_card, card
-                )
-            end
+    ABCU:on_card_post_scored(function(scored_card)
+        if not ABCU.vars.enhancement:card_is_exactly(scored_card) and ABCU.vars.probability:triggers() then
+            ABC.Animations.modify_card(
+                function() ABCU.vars.enhancement:card_set(scored_card) end,
+                scored_card, card
+            )
         end
-    end
+    end)
   end)
   :register()

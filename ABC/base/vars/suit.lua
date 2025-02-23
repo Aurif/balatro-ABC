@@ -17,13 +17,13 @@ ABC.VARS.Suit = classABCVar("Suit")
 
 ---Returns a random suit from those present in the pool.
 ---***
----@param seed string Seed to use for rng.
+---@param seed number Seed to use for rng.
 ---@return ABC.VARS.Suit suit Randomly picked suit.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 function ABC.VARS.Suit:random(seed)
     local valid_suits = {}
-    for _, v in pairs(SMODS.SUITS) do
+    for _, v in pairs(SMODS.Card.SUITS) do
         if not v.disabled and (not v.in_pool or v.in_pool({})) then
             table.insert(valid_suits, v.name)
         end

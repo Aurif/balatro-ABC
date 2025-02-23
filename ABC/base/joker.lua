@@ -12,6 +12,7 @@ local JOKER_DEFAULTS = {
 ---
 
 ---@class ABC.Joker
+---@field private raw any
 ---Starts definition of a new joker.\
 ---Must be ended with `:register()` to have any effect. Sprites for the joker must be placed in `assets/1x/j_<mod_prefix>_<name>.png` and `assets/2x/j_<mod_prefix>_<name>.png` (so, if joker's name is "Checkered Joker" and mod's prefix is "ari_rand", the path will be `assets/1x/j_ari_rand_checkered_joker.png`).
 ---***
@@ -92,14 +93,15 @@ end
 ---***
 ---@generic V
 ---@param self ABC.Joker|{__shadow_var_types: V}
----@param calculate fun(self, card, context, ABCU: ABC.CalculateUtilJoker|{vars: V}): any The calculate function. First three parameters (`self`, `card`, `context`) correspond to the definitions from [Steamodded API](https://github.com/Steamodded/smods/wiki/calculate_functions). The fourth parameter is the CalculateUtil class provided by ABC.
+---@param calculate fun(self, card, context, ABCU: ABC.CalculateUtil|{vars: V}): any The calculate function. First three parameters (`self`, `card`, `context`) correspond to the definitions from [Steamodded API](https://github.com/Steamodded/smods/wiki/calculate_functions). The fourth parameter is the [CalculateUtil class](https://github.com/Aurif/balatro-ABC/wiki/CalculateUtil) provided by ABC.
 ---@return ABC.Joker|{__shadow_var_types: V} self for chaining.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:calculate(calculate)
     self.raw.calculate = function(calc_self, card, context)
-        local ABCU = ABC._CalculateUtilJoker(card, context, self)
-        return calculate(calc_self, card, context, ABCU)
+        local ABCU = __ABC.CalculateUtil(calc_self, card, context, self)
+        ABCU:_set_return_value(calculate(calc_self, card, context, ABCU))
+        return ABCU._return_value
     end
     self.raw.calc_dollar_bonus = function(calc_self, card)
         return self.raw.calculate(calc_self, card, {calc_dollar_bonus=true})

@@ -1,5 +1,7 @@
+ABC.VARS = {}
+
 ---@class ABC.VAR
-ABC.VAR = class()
+__ABC.VAR = class()
 
 ---@param name string Name of the class, for debugging purposes
 function classABCVar(name)

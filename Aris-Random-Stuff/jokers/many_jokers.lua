@@ -1,6 +1,6 @@
 ---
 --- Created by Aurif.
---- DateTime: 20/01/2025 23:00
+--- DateTime: 21/02/2025 20:00
 ---
 
 ABC.Joker("Many Jokers")
@@ -11,7 +11,7 @@ ABC.Joker("Many Jokers")
   })
   :rarity_uncommon()
   :calculate(function(self, card, context, ABCU)
-    if context.calc_dollar_bonus then
+    ABCU:on_dollar_bonus(function()
         local total = 0
         for c = 0, #G.deck.cards do
             if ABCU.vars.probability:triggers() then
@@ -19,7 +19,6 @@ ABC.Joker("Many Jokers")
             end
         end
         return total
-    end
+    end)
   end)
-  :debug_force_in_shop()
   :register()
