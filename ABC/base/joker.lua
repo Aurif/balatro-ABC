@@ -182,6 +182,30 @@ function ABC.Joker:rarity_rare()
 end
 
 ---
+--- Advanced
+---
+
+---Makes the joker needed to be unlocked and defines the unlock condition.
+---@generic J: ABC.Joker
+---@param self J
+---@param description string[] In-game description of the unlock condition, with each list element being a new line. Has analogical structure to [joker description](https://github.com/Aurif/balatro-ABC/wiki/Joker#descriptiondescription).
+---@param check_for_unlock fun(self, args): nil|boolean The check_for_unlock function. The second parameter (`args`) is the context of the check. If this function returns `true`, the card will become unlocked.
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
+function ABC.Joker:unlock_condition(description, check_for_unlock)
+    self.raw.unlocked = false
+    self.raw.loc_txt.unlock = description
+    self.raw.check_for_unlock = function(card_self, args)
+        local should_unlock = check_for_unlock(card_self, args)
+        if should_unlock then
+            unlock_card(card_self)
+        end
+    end
+    return self
+end
+
+---
 --- Notes
 ---
 
