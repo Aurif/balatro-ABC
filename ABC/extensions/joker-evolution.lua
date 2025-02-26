@@ -9,6 +9,7 @@
 function ABC.Joker:evolution_of(other_joker, max_amount, carryover, description)
     if not SMODS.Mods['joker_evolution'] then
         sendDebugMessage('Installing "Joker Evolution" mod will provide additional content')
+        self.meta.prevent_registration = true
         return self
     end
     JokerEvolution.evolutions:add_evolution(other_joker, self.meta.full_name, max_amount, carryover)

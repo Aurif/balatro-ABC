@@ -3,8 +3,10 @@
 --- DateTime: 14/01/2025 22:55
 ---
 local JOKER_DEFAULTS = {
+    perishable_compat = true,
     blueprint_compat = true,
-    eternal_compat = true
+    eternal_compat = true,
+    discovered = false
 }
 
 ---
@@ -115,6 +117,9 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:register()
+    if self.meta.prevent_registration then
+        return
+    end
     self:_setup_default_sprite()
     self:_substitute_description_vars()
     self:_validate()
@@ -276,7 +281,12 @@ end
 function ABC.Joker:_setup_default_sprite()
     self.raw.pos = { x = 0, y = 0 }
     self.raw.atlas = self.meta.full_name
-    SMODS.Sprite:new(self.raw.atlas, SMODS.current_mod.path, self.raw.atlas .. ".png", 71, 95, "asset_atli"):register()
+    SMODS.Atlas {
+      key = self.raw.atlas,
+      path = self.raw.atlas .. ".png",
+      px = 71,
+      py = 95
+    }
 end
 
 ---@private
