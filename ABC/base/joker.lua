@@ -319,7 +319,7 @@ function ABC.Joker:_substitute_description_vars()
         return
     end
     for i, line in pairs(self.raw.loc_txt.text) do
-        for j, k in pairs(self.meta.var_order) do
+        for j, k in pairs(self.meta.var_order or {}) do
             line = line:gsub("#" .. k .. "#", "#" .. j .. "#")
         end
         self.raw.loc_txt.text[i] = line

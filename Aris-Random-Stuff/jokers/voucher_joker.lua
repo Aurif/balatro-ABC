@@ -4,7 +4,7 @@
 ---
 
 ABC.Joker("Voucher Joker")
-  :description({"After defeating a boss blind", "gain a {C:attention}#tag#{}"})
+  :description({"After defeating a Boss Blind", "gain a {C:attention}#tag#{}"})
   :variables({
       tag = ABC.VARS.Tag("tag_voucher"),
   })

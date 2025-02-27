@@ -16,6 +16,24 @@
 ABC.VARS.Tag = classABCVar("Tag")
 
 
+---Returns a random tag from those present in the pool.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.Tag tag Randomly picked tag.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/anaglyph_joker.lua)
+function ABC.VARS.Tag:random(seed)
+    local _pool, _pool_key = get_current_pool('Tag')
+    local _real_pool = {}
+    for k, v in pairs(_pool) do
+        if v ~= "UNAVAILABLE" then
+            table.insert(_real_pool, v)
+        end
+    end
+    local _tag = pseudorandom_element(_real_pool, seed)
+    return ABC.VARS.Tag(_tag)
+end
+
 ---Gives this tag to the player.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/voucher_joker.lua)

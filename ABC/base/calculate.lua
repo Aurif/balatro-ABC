@@ -17,7 +17,7 @@
 __ABC.CalculateUtil = class()
 
 ---
---- Events
+--- Events - round stages
 ---
 
 --- Triggers at the beggining of a round.
@@ -48,6 +48,21 @@ function __ABC.CalculateUtil:on_round_boss_defeated(callback)
     end
 end
 
+--- Triggers during dollar bonus calculation after a blind is defeated.\
+--- Return value determines dollar bonus from this joker.
+--- @param callback fun(): integer Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/many_jokers.lua)
+function __ABC.CalculateUtil:on_dollar_bonus(callback)
+    if self.context.calc_dollar_bonus then
+        return self:_set_return_value(callback())
+    end
+end
+
+---
+--- Events - cards
+---
+
 --- Triggers for each scored card after hand has been scored.\
 --- This is where card modifications should be done.
 --- @param callback fun(scored_card: Card): nil Callback to execute for each card
@@ -61,14 +76,25 @@ function __ABC.CalculateUtil:on_card_post_scored(callback)
     end
 end
 
---- Triggers during dollar bonus calculation after a blind is defeated.\
---- Return value determines dollar bonus from this joker.
---- @param callback fun(): integer Callback to execute
+---
+--- Events - others
+---
+
+--- Triggers after player exits shop and enters blind selection.
+--- @param callback fun(): nil Callback to execute
+function __ABC.CalculateUtil:on_shop_exit(callback)
+    if self.context.ending_shop then
+        callback()
+    end
+end
+
+--- Triggers when player skips a blind.
+--- @param callback fun(): nil Callback to execute
 ---***
----[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/many_jokers.lua)
-function __ABC.CalculateUtil:on_dollar_bonus(callback)
-    if self.context.calc_dollar_bonus then
-        return self:_set_return_value(callback())
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/anaglyph_joker.lua)
+function __ABC.CalculateUtil:on_blind_skipped(callback)
+    if self.context.skip_blind then
+        callback()
     end
 end
 
