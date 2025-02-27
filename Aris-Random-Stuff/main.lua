@@ -15,6 +15,7 @@
 SMODS.load_file("jokers/checkered_joker.lua")()
 SMODS.load_file("jokers/electrician.lua")()
 SMODS.load_file("jokers/many_jokers.lua")()
+SMODS.load_file("jokers/voucher_joker.lua")()
 
 ----------------------------------------------
 ------------MOD CODE END----------------------

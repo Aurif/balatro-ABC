@@ -30,6 +30,24 @@ function __ABC.CalculateUtil:on_round_start(callback)
     end
 end
 
+--- Triggers at the end of a round.
+--- @param callback fun(): nil Callback to execute
+function __ABC.CalculateUtil:on_round_end(callback)
+    if self.context.end_of_round and not (self.context.individual or self.context.repetition) then
+        callback()
+    end
+end
+
+--- Triggers after a boss blind is defeated.
+--- @param callback fun(): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/voucher_joker.lua)
+function __ABC.CalculateUtil:on_round_boss_defeated(callback)
+    if self.context.end_of_round and not (self.context.individual or self.context.repetition) and G.GAME.blind.boss then
+        callback()
+    end
+end
+
 --- Triggers for each scored card after hand has been scored.\
 --- This is where card modifications should be done.
 --- @param callback fun(scored_card: Card): nil Callback to execute for each card
