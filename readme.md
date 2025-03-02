@@ -17,9 +17,9 @@ Current library capabilities:
  - [helpful debug functions](https://github.com/Aurif/balatro-ABC/wiki/Joker#debug-functions)
 
 And now, for a short marketing reel:
-### Why you may want to use ABC
+## Why you may want to use ABC
 
-#### Simpler and more readable code
+### Simpler and more readable code
 ```lua
 ABC.Joker("Voucher Joker")
     :description({"After defeating a Boss Blind", "gain a {C:attention}#tag#{}"})
@@ -65,15 +65,15 @@ ABC.Joker("Checkered Joker")
     :register()
 ```
 
-#### Full autocompletion support
+### Full autocompletion support
 ![autocompletion demo](.img/readme_autocompletion.png)
 
-#### Both in-IDE and [web](https://github.com/Aurif/balatro-ABC/wiki) documentation
+### Both in-IDE and [web](https://github.com/Aurif/balatro-ABC/wiki) documentation
 ![in-IDE documentation demo](.img/readme_documentation_ide.png)
 
 ![in-IDE documentation demo](.img/readme_documentation_web.png)
 
-#### [Many usage examples](https://github.com/Aurif/balatro-ABC/tree/main/Aris-Random-Stuff/jokers)
+### [Many usage examples](https://github.com/Aurif/balatro-ABC/tree/main/Aris-Random-Stuff/jokers)
 
-#### Additional dev util functions
+### Additional dev util functions
 ![in-IDE documentation demo](.img/readme_dev_utils.png)
