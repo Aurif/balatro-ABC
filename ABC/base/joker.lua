@@ -205,6 +205,19 @@ function ABC.Joker:unlock_condition(description, check_for_unlock)
     return self
 end
 
+---Adds other mods as dependency for this joker.\
+---(Joker won't be created if those mods aren't present.)
+---@generic J: ABC.Joker
+---@param self J
+---@param dependencies string[] List of mod ids to set as dependencies.
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
+function ABC.Joker:depends_on(dependencies)
+    self.raw.dependencies = dependencies
+    return self
+end
+
 ---
 --- Notes
 ---

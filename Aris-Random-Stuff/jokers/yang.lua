@@ -20,7 +20,6 @@ ABC.Joker("Yang")
       {"Discover the","{C:attention}Yin{} joker."},
       function (self, args)
         if args.type == 'discover_amount' then
-            print(":", tostring(ABC.VARS.Joker("j_ari_rand_yin"):is_discovered()))
             return ABC.VARS.Joker("j_ari_rand_yin"):is_discovered()
         end
       end

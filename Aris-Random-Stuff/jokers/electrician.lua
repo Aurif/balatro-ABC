@@ -20,4 +20,5 @@ ABC.Joker("Electrician")
         end
     end)
   end)
+  :depends_on({"SnowMods"})
   :register()
