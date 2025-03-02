@@ -11,11 +11,13 @@ The `ABC` folder is the library itself, and all the other folders are just [vari
 
 It is recommended that you visit [the documentation](https://github.com/Aurif/balatro-ABC/wiki/Joker).
 
+--- 
 Current library capabilities:
  - creating `common`, `uncommon`, and `rare` jokers
  - custom unlock conditions
  - [helpful debug functions](https://github.com/Aurif/balatro-ABC/wiki/Joker#debug-functions)
 
+--- 
 And now, for a short marketing reel:
 ## Why you may want to use ABC
 
