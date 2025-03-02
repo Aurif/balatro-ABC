@@ -82,7 +82,7 @@ end
 function __ABC.CalculateUtil:on_card_post_scored(callback)
     if self.context.after and self.context.scoring_hand and not self.context.blueprint then
         for i = 1, #self.context.scoring_hand do
-            return self:_set_return_value(callback(self.context.scoring_hand[i]))
+            callback(self.context.scoring_hand[i])
         end
     end
 end
