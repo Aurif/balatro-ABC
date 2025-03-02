@@ -124,6 +124,15 @@ function ABC.Joker:register()
     self:_substitute_description_vars()
     self:_validate()
     SMODS.Joker(self.raw)
+
+    for _, callback in pairs(self.listeners["register"] or {}) do
+        G.E_MANAGER:add_event(Event({ trigger = 'after',
+            func = function()
+                callback()
+                return true
+            end
+        }))
+    end
 end
 
 ---
@@ -283,6 +292,34 @@ function ABC.Joker:debug_force_in_shop()
     return self
 end
 
+
+---Resets the unlock and discovery state whenever profile is loaded.\
+---For debugging purposes only.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+function ABC.Joker:debug_reset_unlock()
+    local joker_key = self.meta.full_name
+    local function reset_unlock()
+        G.P_CENTERS[joker_key].discovered = false
+        if (G.P_CENTERS[joker_key].unlock_condition ~= nil or G.P_CENTERS[joker_key].check_for_unlock ~= nil) and G.P_CENTERS[joker_key].unlocked then
+            G.P_CENTERS[joker_key].unlocked = false
+            G.P_LOCKED[#G.P_LOCKED + 1] = G.P_CENTERS[joker_key]
+        end
+    end
+
+    local old_Game_init_item_prototypes = Game.init_item_prototypes
+    function Game:init_item_prototypes()
+        local result = old_Game_init_item_prototypes(self)
+        reset_unlock()
+        return result
+    end
+    self:_add_listener("register", reset_unlock)
+
+    return self
+end
+
 ---
 --- Last resort functions
 ---
@@ -309,6 +346,7 @@ end
 function ABC.Joker:__init__(name)
     self.raw = copy_table(JOKER_DEFAULTS)
     self.meta = {}
+    self.listeners = {}
     self.raw.name = name
     self.raw.key = string.gsub(string.lower(name), "%W", "_")
     self.meta.full_name = "j_" .. SMODS.current_mod.prefix .. "_" .. self.raw.key
@@ -353,4 +391,12 @@ function ABC.Joker:_validate()
         end
         error(error_message)
     end
+end
+
+---@private
+function ABC.Joker:_add_listener(key, callback)
+    if not self.listeners[key] then
+        self.listeners[key] = {}
+    end
+    table.insert(self.listeners[key], callback)
 end
