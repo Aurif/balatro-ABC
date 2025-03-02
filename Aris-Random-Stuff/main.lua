@@ -17,6 +17,8 @@ SMODS.load_file("jokers/electrician.lua")()
 SMODS.load_file("jokers/many_jokers.lua")()
 SMODS.load_file("jokers/voucher_joker.lua")()
 SMODS.load_file("jokers/anaglyph_joker.lua")()
+SMODS.load_file("jokers/yin.lua")()
+SMODS.load_file("jokers/yang.lua")()
 
 ----------------------------------------------
 ------------MOD CODE END----------------------

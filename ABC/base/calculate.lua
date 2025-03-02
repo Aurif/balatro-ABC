@@ -26,7 +26,7 @@ __ABC.CalculateUtil = class()
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 function __ABC.CalculateUtil:on_round_start(callback)
     if self.context.setting_blind and not self.joker_self.getting_sliced then
-        callback()
+        return self:_set_return_value(callback())
     end
 end
 
@@ -34,7 +34,7 @@ end
 --- @param callback fun(): nil Callback to execute
 function __ABC.CalculateUtil:on_round_end(callback)
     if self.context.end_of_round and not (self.context.individual or self.context.repetition) then
-        callback()
+        return self:_set_return_value(callback())
     end
 end
 
@@ -44,7 +44,7 @@ end
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/voucher_joker.lua)
 function __ABC.CalculateUtil:on_round_boss_defeated(callback)
     if self.context.end_of_round and not (self.context.individual or self.context.repetition) and G.GAME.blind.boss then
-        callback()
+        return self:_set_return_value(callback())
     end
 end
 
@@ -63,15 +63,26 @@ end
 --- Events - cards
 ---
 
+--- Triggers for each scored card during scoring.\
+--- This is where card-based chips and mult bonuses can be done.
+--- @param callback fun(scored_card: Card): nil Callback to execute for each card
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
+function __ABC.CalculateUtil:on_card_scored(callback)
+    if self.context.individual and self.context.cardarea == G.play then
+        return self:_set_return_value(callback(self.context.other_card))
+    end
+end
+
 --- Triggers for each scored card after hand has been scored.\
 --- This is where card modifications should be done.
 --- @param callback fun(scored_card: Card): nil Callback to execute for each card
 ---***
----[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
 function __ABC.CalculateUtil:on_card_post_scored(callback)
     if self.context.after and self.context.scoring_hand and not self.context.blueprint then
         for i = 1, #self.context.scoring_hand do
-            callback(self.context.scoring_hand[i])
+            return self:_set_return_value(callback(self.context.scoring_hand[i]))
         end
     end
 end
@@ -84,7 +95,7 @@ end
 --- @param callback fun(): nil Callback to execute
 function __ABC.CalculateUtil:on_shop_exit(callback)
     if self.context.ending_shop then
-        callback()
+        return self:_set_return_value(callback())
     end
 end
 
@@ -94,8 +105,50 @@ end
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/anaglyph_joker.lua)
 function __ABC.CalculateUtil:on_blind_skipped(callback)
     if self.context.skip_blind then
-        callback()
+        return self:_set_return_value(callback())
     end
+end
+
+---
+--- Conditionals
+---
+
+--- Checks if this is the first hand of round.
+--- @return boolean is_first_hand True if this is the first hand of round.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
+function __ABC.CalculateUtil:is_hand_first()
+    return G.GAME.current_round.hands_played == 0
+end
+
+--- Checks if this is the final hand of round.
+--- @return boolean is_final_hand True if this is the final hand of round.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yang.lua)
+function __ABC.CalculateUtil:is_hand_final()
+    return G.GAME.current_round.hands_left == 0
+end
+
+---
+--- Effects
+---
+
+--- Scores a given amount of chips.
+--- @param chips integer Amount of chips to score.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
+function __ABC.CalculateUtil:do_chips_add(chips)
+    self:_set_return_table_prop("chips", chips)
+    self:_set_return_table_prop("card", self.joker_card)
+end
+
+--- Scores a given amount of mult.
+--- @param mult integer Amount of mult to score.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yang.lua)
+function __ABC.CalculateUtil:do_mult_add(mult)
+    self:_set_return_table_prop("mult", mult)
+    self:_set_return_table_prop("card", self.joker_card)
 end
 
 ---
@@ -155,4 +208,15 @@ function __ABC.CalculateUtil:_set_return_value(val)
         self._return_value = val
     end
     return val
+end
+
+---@private
+function __ABC.CalculateUtil:_set_return_table_prop(prop, val)
+    if self._return_value == nil then
+        self._return_value = {}
+    end
+    if type(self._return_value) ~= "table" then
+        error("Couldn't modify return prop \"" .. prop .. "\", a conflicting return value has already been specified earlier")
+    end
+    self._return_value[prop] = val
 end
