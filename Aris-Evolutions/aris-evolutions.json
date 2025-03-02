@@ -1,0 +1,15 @@
+{
+	"id": "ari_evolutions",
+	"prefix": "ari_evolutions",
+	"name": "Ari's Evolutions",
+	"description": "More joker evolutions!",
+	"author": ["Aurif"],
+	"badge_colour": "feb65c",
+	"version": "0.0.1",
+	"main_file": "main.lua",
+	"dependencies": [
+		"Steamodded (>=1.*)",
+		"Lovely (>=0.6)",
+        "ABC (>=0.1)"
+	]
+}

@@ -1,0 +1,15 @@
+{
+	"id": "ABC",
+	"prefix": "ABC",
+	"name": "Ari's Balatro (modding) Core",
+	"description": "A library for an object-oriented approach to modding balatro",
+	"author": ["Aurif"],
+	"badge_colour": "2a004b",
+	"version": "0.1.0",
+	"main_file": "main.lua",
+	"priority": -900,
+	"dependencies": [
+		"Steamodded (>=1.*)",
+		"Lovely (>=0.6)"
+	]
+}

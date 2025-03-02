@@ -6,10 +6,10 @@ Other folders contain additional Balatro content like new jokers, so you can ins
 
 
 ## If you are a modder
-This is a library (in early stages) built on top of [Steammodded](https://github.com/Steamodded/smods/wiki) that uses object-oriented approach to make modding Balatro easier. \
+This is a library (in early stages) built on top of [Steammodded](https://github.com/Steamodded/smods/wiki#how-to-install-steamodded) that uses object-oriented approach to make modding Balatro easier. \
 The `ABC` folder is the library itself, and all the other folders are just [various examples](https://github.com/Aurif/balatro-ABC/tree/main/Aris-Random-Stuff/jokers) of how to use it.
 
-It is recommended that you visit [the documentation](https://github.com/Aurif/balatro-ABC/wiki/Joker).
+It is recommended that you visit the ["getting started" part of documentation](https://github.com/Aurif/balatro-ABC/wiki).
 
 --- 
 Current library capabilities:

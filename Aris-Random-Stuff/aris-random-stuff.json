@@ -1,0 +1,15 @@
+{
+	"id": "ari_rand",
+	"prefix": "ari_rand",
+	"name": "Ari's Random Stuff",
+	"description": "A random collection of jokers",
+	"author": ["Aurif"],
+	"badge_colour": "feb65c",
+	"version": "0.1.0",
+	"main_file": "main.lua",
+	"dependencies": [
+		"Steamodded (>=1.*)",
+		"Lovely (>=0.6)",
+        "ABC (>=0.1)"
+	]
+}
