@@ -194,7 +194,7 @@ end
 --- Advanced
 ---
 
----Makes the joker needed to be unlocked and defines the unlock condition.
+---Makes the Joker require unlocking and defines the unlock condition.
 ---@generic J: ABC.Joker
 ---@param self J
 ---@param description string[] In-game description of the unlock condition, with each list element being a new line. Has analogical structure to [joker description](https://github.com/Aurif/balatro-ABC/wiki/Joker#descriptiondescription).
