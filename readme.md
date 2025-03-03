@@ -85,7 +85,7 @@ Even if the library doesn't (yet) support the functionality you wish to use, you
 ```lua
     :raw_set("cost", 20)
     :calculate(function(self, card, context, ABCU)
-        if self.context.after and self.context.scoring_hand and not self.context.blueprint then
+        if context.after and context.scoring_hand and not context.blueprint then
             ...
         end
         ABCU:on_dollar_bonus(function() ... end)
