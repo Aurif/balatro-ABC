@@ -80,7 +80,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
 function __ABC.CalculateUtil:on_card_post_scored(callback)
-    if self.context.after and self.context.scoring_hand and not self.context.blueprint then
+    if self.context.after and self.context.scoring_hand then
         for i = 1, #self.context.scoring_hand do
             callback(self.context.scoring_hand[i])
         end

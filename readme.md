@@ -79,3 +79,15 @@ ABC.Joker("Checkered Joker")
 
 ### Additional dev util functions
 ![in-IDE documentation demo](.img/readme_dev_utils.png)
+
+### Retain low-level access
+Even if the library doesn't (yet) support the functionality you wish to use, you can still code it the same way you would do without the library, not blocking your development!
+```lua
+    :raw_set("cost", 20)
+    :calculate(function(self, card, context, ABCU)
+        if self.context.after and self.context.scoring_hand and not self.context.blueprint then
+            ...
+        end
+        ABCU:on_dollar_bonus(function() ... end)
+    end)
+```
