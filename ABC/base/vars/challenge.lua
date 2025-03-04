@@ -23,3 +23,10 @@ ABC.VARS.Challenge = classABCVar("Challenge")
 function ABC.VARS.Challenge:is_completed()
     return G.PROFILES[G.SETTINGS.profile].challenge_progress.completed[self.value]
 end
+
+---@private
+function ABC.VARS.Challenge:_localize()
+    return {
+        text=localize(self.value, 'challenge_names')
+    }
+end

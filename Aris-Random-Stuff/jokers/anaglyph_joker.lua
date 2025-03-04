@@ -12,10 +12,11 @@ ABC.Joker("Anaglyph Joker")
     end)
   end)
   :unlock_condition(
-    {"Win a run with", "{C:attention}Anaglyph Deck{}"},
-    function(self, args)
+    {"Win a run with", "{C:attention}#deck#{}"},
+    { deck = ABC.VARS.Deck("b_anaglyph") },
+    function(self, args, vars)
         if args.type == 'discover_amount' or args.type == 'win_deck' then
-            return ABC.VARS.Deck("b_anaglyph"):get_win_max_stake() > 0
+            return vars.deck:get_win_max_stake() > 0
         end
     end
   )

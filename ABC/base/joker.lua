@@ -34,41 +34,10 @@ ABC.Joker = class()
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:variables(variables)
-    self.meta.var_wrappers = {}
-    for k, v in pairs(variables) do
-        if type(v) == "table" and getmetatable(v).__is_abc_var then
-            self.meta.var_wrappers[k] = getmetatable(v)
-            variables[k] = v.value
-        end
-    end
-    self.raw.config = {
-        extra = variables
-    }
+    self.raw.loc_vars = __ABC.make_localization_function(variables, function(_, _, card) return card.ability.extra end)
+    self.raw.config = {}
+    self.raw.config.extra, self.meta.var_wrappers = __ABC.unwrap_variables(variables)
 
-    local var_order = {}
-    for k, _ in pairs(variables) do
-        table.insert(var_order, k)
-    end
-    self.meta.var_order = var_order
-    self.raw.loc_vars = function(_, info_queue, card)
-        local loc_vars = {}
-        for _, k in pairs(var_order) do
-            if self.meta.var_wrappers[k] and self.meta.var_wrappers[k]._localize then
-                local wrapper = self.meta.var_wrappers[k]
-                local localization = wrapper(card.ability.extra[k]):_localize()
-                table.insert(loc_vars, localization.text)
-                for extra_k, extra_v in pairs(localization.extra or {}) do
-                    if not loc_vars[extra_k] then
-                        loc_vars[extra_k] = {}
-                    end
-                    table.insert(loc_vars[extra_k], extra_v)
-                end
-            else
-                table.insert(loc_vars, card.ability.extra[k])
-            end
-        end
-        return { vars = loc_vars }
-    end
     return self
 end
 
@@ -81,11 +50,6 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:description(description)
-    if not self.raw.loc_txt then
-        self.raw.loc_txt = {
-            name = self.raw.name
-        }
-    end
     self.raw.loc_txt.text = description
     return self
 end
@@ -124,7 +88,9 @@ function ABC.Joker:register()
         return
     end
     self:_setup_default_sprite()
-    self:_substitute_description_vars()
+    if self.raw.config and self.raw.config.extra then
+        self.raw.loc_txt.text = __ABC.substitute_description_vars(self.raw.loc_txt.text, self.raw.config.extra)
+    end
     self:_validate()
     SMODS.Joker(self.raw)
 
@@ -199,17 +165,24 @@ end
 
 ---Makes the Joker require unlocking and defines the unlock condition.
 ---@generic J: ABC.Joker
+---@generic V
 ---@param self J
 ---@param description string[] In-game description of the unlock condition, with each list element being a new line. Has analogical structure to [joker description](https://github.com/Aurif/balatro-ABC/wiki/Joker#descriptiondescription).
----@param check_for_unlock fun(self, args): nil|boolean The check_for_unlock function. The second parameter (`args`) is the context of the check. If this function returns `true`, the card will become unlocked.
+---@param variables V Variables to use for the unlock condition, mostly useful for localization. Has analogical structure to [joker variables](https://github.com/Aurif/balatro-ABC/wiki/Joker#variablesvariables).
+---@param check_for_unlock fun(self, args, variables: V): nil|boolean The check_for_unlock function. If this function returns `true`, the card will become unlocked. The second parameter (`args`) is the context of the check, the third (`variables`) is the dict of variables provided earlier.
 ---@return J self for chaining.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
-function ABC.Joker:unlock_condition(description, check_for_unlock)
+function ABC.Joker:unlock_condition(description, variables, check_for_unlock)
+    if variables == nil then
+        variables = {}
+    end
+
     self.raw.unlocked = false
-    self.raw.loc_txt.unlock = description
+    self.raw.locked_loc_vars = __ABC.make_localization_function(variables, function() return __ABC.unwrap_variables(variables) end)
+    self.raw.loc_txt.unlock = __ABC.substitute_description_vars(description, variables)
     self.raw.check_for_unlock = function(card_self, args)
-        local should_unlock = check_for_unlock(card_self, args)
+        local should_unlock = check_for_unlock(card_self, args, variables)
         if should_unlock then
             unlock_card(card_self)
         end
@@ -352,6 +325,7 @@ function ABC.Joker:__init__(name)
     self.listeners = {}
     self.raw.name = name
     self.raw.key = string.gsub(string.lower(name), "%W", "_")
+    self.raw.loc_txt = { name = self.raw.name }
     self.meta.full_name = "j_" .. SMODS.current_mod.prefix .. "_" .. self.raw.key
 end
 
@@ -365,19 +339,6 @@ function ABC.Joker:_setup_default_sprite()
       px = 71,
       py = 95
     }
-end
-
----@private
-function ABC.Joker:_substitute_description_vars()
-    if not self.raw.loc_txt or not self.raw.loc_txt.text then
-        return
-    end
-    for i, line in pairs(self.raw.loc_txt.text) do
-        for j, k in pairs(self.meta.var_order or {}) do
-            line = line:gsub("#" .. k .. "#", "#" .. j .. "#")
-        end
-        self.raw.loc_txt.text[i] = line
-    end
 end
 
 ---@private

@@ -23,10 +23,11 @@ ABC.Joker("Checkered Joker")
         end)
     end)
     :unlock_condition(
-        {"Win a run with", "{C:attention}Checkered Deck{}"},
-        function(self, args)
+        {"Win a run with", "{C:attention}#deck#{}"},
+        { deck = ABC.VARS.Deck("b_checkered") },
+        function(self, args, vars)
             if args.type == 'discover_amount' or args.type == 'win_deck' then
-                return ABC.VARS.Deck("b_checkered"):get_win_max_stake() > 0
+                return vars.deck:get_win_max_stake() > 0
             end
         end
     )

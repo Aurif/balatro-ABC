@@ -15,8 +15,8 @@ function ABC.Joker:evolution_of(other_joker, max_amount, carryover, description)
     JokerEvolution.evolutions:add_evolution(other_joker, self.meta.full_name, max_amount, carryover)
     self.meta.evolution_of = other_joker
     self.raw.rarity = "evo"
-    if SMODS.Jokers[other_joker] and SMODS.Jokers[other_joker].cost then
-        self.raw.cost = SMODS.Jokers[other_joker].cost * 2
+    if SMODS.Centers[other_joker] and SMODS.Centers[other_joker].cost then
+        self.raw.cost = SMODS.Centers[other_joker].cost * 2
     else
         self.raw.cost = 8
     end

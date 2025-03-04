@@ -24,3 +24,10 @@ ABC.VARS.Joker = classABCVar("Joker")
 function ABC.VARS.Joker:is_discovered()
     return G.P_CENTERS[self.value].discovered
 end
+
+---@private
+function ABC.VARS.Joker:_localize()
+    return {
+        text=localize{ type = 'name_text', set = 'Joker', key = self.value }
+    }
+end

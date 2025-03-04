@@ -23,3 +23,10 @@ ABC.VARS.Deck = classABCVar("Deck")
 function ABC.VARS.Deck:get_win_max_stake()
     return get_deck_win_stake(self.value)
 end
+
+---@private
+function ABC.VARS.Deck:_localize()
+    return {
+        text=localize{ type = 'name_text', set = 'Back', key = self.value }
+    }
+end
