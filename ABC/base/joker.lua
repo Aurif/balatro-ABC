@@ -165,7 +165,7 @@ end
 
 ---Makes the Joker require unlocking and defines the unlock condition.
 ---@generic J: ABC.Joker
----@generic V
+---@generic V : {[string]: string|number|ABC.VAR}
 ---@param self J
 ---@param description string[] In-game description of the unlock condition, with each list element being a new line. Has analogical structure to [joker description](https://github.com/Aurif/balatro-ABC/wiki/Joker#descriptiondescription).
 ---@param variables V Variables to use for the unlock condition, mostly useful for localization. Has analogical structure to [joker variables](https://github.com/Aurif/balatro-ABC/wiki/Joker#variablesvariables).
