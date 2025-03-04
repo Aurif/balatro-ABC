@@ -10,6 +10,6 @@
 	"dependencies": [
 		"Steamodded (>=1.*)",
 		"Lovely (>=0.6)",
-        "ABC (>=0.1)"
+        "ABC (>=0.1.1)"
 	]
 }

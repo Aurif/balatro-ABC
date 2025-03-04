@@ -63,6 +63,17 @@ end
 --- Events - cards
 ---
 
+--- Triggers once during scoring.\
+--- This is where joker-based chips and mult bonuses can be done.
+--- @param callback fun(scored_hand: Card[]): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
+function __ABC.CalculateUtil:on_hand_scored(callback)
+    if self.context.joker_main then
+        return self:_set_return_value(callback(self.context.scoring_hand))
+    end
+end
+
 --- Triggers for each scored card during scoring.\
 --- This is where card-based chips and mult bonuses can be done.
 --- @param callback fun(scored_card: Card): nil Callback to execute for each card
@@ -84,6 +95,23 @@ function __ABC.CalculateUtil:on_card_post_scored(callback)
         for i = 1, #self.context.scoring_hand do
             callback(self.context.scoring_hand[i])
         end
+    end
+end
+
+---
+--- Events - joker
+---
+
+--- Triggers when this joker card is destroyed or sold.
+--- @param callback fun(is_sold: boolean): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
+function __ABC.CalculateUtil:on_self_destroyed(callback)
+    if self.context.selling_self then
+        self.joker_card._was_sold = true
+    end
+    if self.context.remove_from_deck then
+        return self:_set_return_value(callback(self.joker_card._was_sold))
     end
 end
 
@@ -150,6 +178,57 @@ function __ABC.CalculateUtil:do_mult_add(mult)
     self:_set_return_table_prop("mult", mult)
     self:_set_return_table_prop("card", self.joker_card)
 end
+
+--- Applies a mult multiplier.
+--- @param x_mult number Amount to multiply mult by.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
+function __ABC.CalculateUtil:do_mult_multiply(x_mult)
+    self:_set_return_table_prop("x_mult", x_mult)
+    self:_set_return_table_prop("card", self.joker_card)
+end
+
+--- Applies a chip multiplier.
+--- @param x_chips number Amount to multiply chips by.
+function __ABC.CalculateUtil:do_chips_multiply(x_chips)
+    self:_set_return_table_prop("x_chips", x_chips)
+    self:_set_return_table_prop("card", self.joker_card)
+end
+
+--- Destroys a given joker.
+--- @param joker SMODS.Joker Joker to destroy.
+--- @param force? boolean If true, will destroy the joker even if it's eternal.
+--- @return boolean was_destroyed True if the joker was succesfully destroyed, false otherwise (for example, it was eternal or it was already being destroyed)
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
+function __ABC.CalculateUtil:do_joker_destroy(joker, force)
+    if joker.getting_sliced or (joker.ability.eternal and not force) then
+        return false
+    end
+
+    joker.getting_sliced = true
+    G.E_MANAGER:add_event(Event({func = function()
+        joker:start_dissolve({G.C.RED}, nil, 1.6)
+    return true end }))
+    return true
+end
+
+---
+--- Getters
+---
+
+--- Returns other joker cards the player currently has.
+--- @return SMODS.Joker[] other_jokers List of other jo,kers
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
+function __ABC.CalculateUtil:get_other_jokers()
+    local other_jokers = {}
+    for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i] ~= self.joker_card and not G.jokers.cards[i].getting_sliced then other_jokers[#other_jokers+1] = G.jokers.cards[i] end
+    end
+    return other_jokers
+end
+
 
 ---
 --- Internal

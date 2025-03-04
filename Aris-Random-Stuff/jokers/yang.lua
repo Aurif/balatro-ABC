@@ -4,7 +4,7 @@
 ---
 
 ABC.Joker("Yang")
-  :description({"Scored cards give {C:mult}+#mult#{} Mult", "on the {C:attention}final hand{} of round."})
+  :description({"Scored cards give {C:mult}+#mult#{} Mult", "on the {C:attention}final hand{} of round"})
   :variables({
     mult = 3
   })

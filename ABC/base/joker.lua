@@ -108,6 +108,9 @@ function ABC.Joker:calculate(calculate)
     self.raw.calc_dollar_bonus = function(calc_self, card)
         return self.raw.calculate(calc_self, card, {calc_dollar_bonus=true})
     end
+    self.raw.remove_from_deck = function(calc_self, card)
+        return self.raw.calculate(calc_self, card, {remove_from_deck=true})
+    end
 
     return self
 end

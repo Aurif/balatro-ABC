@@ -4,7 +4,7 @@
 ---
 
 ABC.Joker("Yin")
-  :description({"Scored cards give {C:chips}+#chips#{} Chips", "on the {C:attention}first hand{} of round."})
+  :description({"Scored cards give {C:chips}+#chips#{} Chips", "on the {C:attention}first hand{} of round"})
   :variables({
     chips = 20
   })
