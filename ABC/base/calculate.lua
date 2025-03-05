@@ -98,6 +98,22 @@ function __ABC.CalculateUtil:on_card_post_scored(callback)
     end
 end
 
+--- Triggers for each scored card to determine if it should be retriggered.\
+--- Only retriggering should be done in this step.
+--- @param callback fun(card: Card): integer Callback to execute for each card, the returned value determines the number of additional triggers
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/evil_red_seal.lua)
+function __ABC.CalculateUtil:on_card_should_retrigger(callback)
+    if self.context.repetition and self.context.cardarea == G.play then
+        local repetition_count = callback(self.context.other_card)
+        if not repetition_count or repetition_count <= 0 then
+            return
+        end
+        self:_set_return_table_prop("repetitions", repetition_count)
+        self:_set_return_table_prop("card", self.joker_card)
+    end
+end
+
 ---
 --- Events - joker
 ---
