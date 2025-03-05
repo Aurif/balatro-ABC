@@ -190,6 +190,8 @@ end
 
 --- Applies a chip multiplier.
 --- @param x_chips number Amount to multiply chips by.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/high_contrast_joker.lua)
 function __ABC.CalculateUtil:do_chips_multiply(x_chips)
     self:_set_return_table_prop("x_chips", x_chips)
     self:_set_return_table_prop("card", self.joker_card)

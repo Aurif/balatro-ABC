@@ -33,5 +33,4 @@ ABC.Joker("Mutually Assured Destruction")
         end
     end
   )
-  :debug_reset_unlock()
   :register()
