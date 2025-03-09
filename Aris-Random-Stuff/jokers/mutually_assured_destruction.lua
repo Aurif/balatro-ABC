@@ -27,9 +27,9 @@ ABC.Joker("Mutually Assured Destruction")
   :unlock_condition(
     {"Complete the", "{C:attention}#challenge#{}", "challenge"},
     { challenge = ABC.VARS.Challenge('c_knife_1') },
-    function (self, args, vars)
+    function (self, args, ABCU)
         if args.win_challenge then
-            return vars.challenge:is_completed()
+            return ABCU.vars.challenge:is_completed()
         end
     end
   )

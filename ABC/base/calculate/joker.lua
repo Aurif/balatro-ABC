@@ -7,42 +7,45 @@
 --- Base
 ---
 
----@class ABC.CalculateUtil
----@field vars any Allows access to joker's variables.<br/>This is a table-like property, variables can be read with `ABCU.vars.suit` and set with `ABCU.vars.suit = ...`.
+---@class ABC.CalculateUtilJoker : ABC.CalculateUtil
+---@sticker joker
 ---@field private joker_self any
 ---@field private joker_card any
 ---@field private context any
 ---@field private joker_definition any
----@overload fun(joker_self, joker_card, context, joker_definition): ABC.CalculateUtil private
-__ABC.CalculateUtil = class()
+---@overload fun(joker_self, joker_card, context, joker_definition): ABC.CalculateUtilJoker private
+__ABC.CalculateUtilJoker = class(__ABC.CalculateUtil)
 
 ---
 --- Events - round stages
 ---
 
 --- Triggers at the beggining of a round.
+---***
 --- @param callback fun(): nil Callback to execute
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
-function __ABC.CalculateUtil:on_round_start(callback)
+function __ABC.CalculateUtilJoker:on_round_start(callback)
     if self.context.setting_blind and not self.joker_self.getting_sliced then
         return self:_set_return_value(callback())
     end
 end
 
 --- Triggers at the end of a round.
+---***
 --- @param callback fun(): nil Callback to execute
-function __ABC.CalculateUtil:on_round_end(callback)
+function __ABC.CalculateUtilJoker:on_round_end(callback)
     if self.context.end_of_round and not (self.context.individual or self.context.repetition) then
         return self:_set_return_value(callback())
     end
 end
 
 --- Triggers after a boss blind is defeated.
+---***
 --- @param callback fun(): nil Callback to execute
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/voucher_joker.lua)
-function __ABC.CalculateUtil:on_round_boss_defeated(callback)
+function __ABC.CalculateUtilJoker:on_round_boss_defeated(callback)
     if self.context.end_of_round and not (self.context.individual or self.context.repetition) and G.GAME.blind.boss then
         return self:_set_return_value(callback())
     end
@@ -50,10 +53,11 @@ end
 
 --- Triggers during dollar bonus calculation after a blind is defeated.\
 --- Return value determines dollar bonus from this joker.
+---***
 --- @param callback fun(): integer Callback to execute
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/many_jokers.lua)
-function __ABC.CalculateUtil:on_dollar_bonus(callback)
+function __ABC.CalculateUtilJoker:on_dollar_bonus(callback)
     if self.context.calc_dollar_bonus then
         return self:_set_return_value(callback())
     end
@@ -65,10 +69,11 @@ end
 
 --- Triggers once during scoring.\
 --- This is where joker-based chips and mult bonuses can be done.
+---***
 --- @param callback fun(scored_hand: Card[]): nil Callback to execute
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
-function __ABC.CalculateUtil:on_hand_scored(callback)
+function __ABC.CalculateUtilJoker:on_hand_scored(callback)
     if self.context.joker_main then
         return self:_set_return_value(callback(self.context.scoring_hand))
     end
@@ -76,10 +81,11 @@ end
 
 --- Triggers for each scored card during scoring.\
 --- This is where card-based chips and mult bonuses can be done.
+---***
 --- @param callback fun(scored_card: Card): nil Callback to execute for each card
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
-function __ABC.CalculateUtil:on_card_scored(callback)
+function __ABC.CalculateUtilJoker:on_card_scored(callback)
     if self.context.individual and self.context.cardarea == G.play then
         return self:_set_return_value(callback(self.context.other_card))
     end
@@ -87,10 +93,11 @@ end
 
 --- Triggers for each scored card after hand has been scored.\
 --- This is where card modifications should be done.
+---***
 --- @param callback fun(scored_card: Card): nil Callback to execute for each card
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
-function __ABC.CalculateUtil:on_card_post_scored(callback)
+function __ABC.CalculateUtilJoker:on_card_post_scored(callback)
     if self.context.after and self.context.scoring_hand then
         for i = 1, #self.context.scoring_hand do
             callback(self.context.scoring_hand[i])
@@ -100,10 +107,11 @@ end
 
 --- Triggers for each scored card to determine if it should be retriggered.\
 --- Only retriggering should be done in this step.
+---***
 --- @param callback fun(card: Card): integer Callback to execute for each card, the returned value determines the number of additional triggers
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/evil_red_seal.lua)
-function __ABC.CalculateUtil:on_card_should_retrigger(callback)
+function __ABC.CalculateUtilJoker:on_card_should_retrigger(callback)
     if self.context.repetition and self.context.cardarea == G.play then
         local repetition_count = callback(self.context.other_card)
         if not repetition_count or repetition_count <= 0 then
@@ -119,10 +127,11 @@ end
 ---
 
 --- Triggers when this joker card is destroyed or sold.
+---***
 --- @param callback fun(is_sold: boolean): nil Callback to execute
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
-function __ABC.CalculateUtil:on_self_destroyed(callback)
+function __ABC.CalculateUtilJoker:on_self_destroyed(callback)
     if self.context.selling_self then
         self.joker_card._was_sold = true
     end
@@ -136,18 +145,20 @@ end
 ---
 
 --- Triggers after player exits shop and enters blind selection.
+---***
 --- @param callback fun(): nil Callback to execute
-function __ABC.CalculateUtil:on_shop_exit(callback)
+function __ABC.CalculateUtilJoker:on_shop_exit(callback)
     if self.context.ending_shop then
         return self:_set_return_value(callback())
     end
 end
 
 --- Triggers when player skips a blind.
+---***
 --- @param callback fun(): nil Callback to execute
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/anaglyph_joker.lua)
-function __ABC.CalculateUtil:on_blind_skipped(callback)
+function __ABC.CalculateUtilJoker:on_blind_skipped(callback)
     if self.context.skip_blind then
         return self:_set_return_value(callback())
     end
@@ -158,18 +169,20 @@ end
 ---
 
 --- Checks if this is the first hand of round.
+---***
 --- @return boolean is_first_hand True if this is the first hand of round.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
-function __ABC.CalculateUtil:is_hand_first()
+function __ABC.CalculateUtilJoker:is_hand_first()
     return G.GAME.current_round.hands_played == 0
 end
 
 --- Checks if this is the final hand of round.
+---***
 --- @return boolean is_final_hand True if this is the final hand of round.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yang.lua)
-function __ABC.CalculateUtil:is_hand_final()
+function __ABC.CalculateUtilJoker:is_hand_final()
     return G.GAME.current_round.hands_left == 0
 end
 
@@ -178,48 +191,53 @@ end
 ---
 
 --- Scores a given amount of chips.
+---***
 --- @param chips integer Amount of chips to score.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
-function __ABC.CalculateUtil:do_chips_add(chips)
+function __ABC.CalculateUtilJoker:do_chips_add(chips)
     self:_set_return_table_prop("chips", chips)
     self:_set_return_table_prop("card", self.joker_card)
 end
 
 --- Scores a given amount of mult.
+---***
 --- @param mult integer Amount of mult to score.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yang.lua)
-function __ABC.CalculateUtil:do_mult_add(mult)
+function __ABC.CalculateUtilJoker:do_mult_add(mult)
     self:_set_return_table_prop("mult", mult)
     self:_set_return_table_prop("card", self.joker_card)
 end
 
 --- Applies a mult multiplier.
+---***
 --- @param x_mult number Amount to multiply mult by.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
-function __ABC.CalculateUtil:do_mult_multiply(x_mult)
+function __ABC.CalculateUtilJoker:do_mult_multiply(x_mult)
     self:_set_return_table_prop("x_mult", x_mult)
     self:_set_return_table_prop("card", self.joker_card)
 end
 
 --- Applies a chip multiplier.
+---***
 --- @param x_chips number Amount to multiply chips by.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/high_contrast_joker.lua)
-function __ABC.CalculateUtil:do_chips_multiply(x_chips)
+function __ABC.CalculateUtilJoker:do_chips_multiply(x_chips)
     self:_set_return_table_prop("x_chips", x_chips)
     self:_set_return_table_prop("card", self.joker_card)
 end
 
 --- Destroys a given joker.
+---***
 --- @param joker SMODS.Joker Joker to destroy.
 --- @param force? boolean If true, will destroy the joker even if it's eternal.
 --- @return boolean was_destroyed True if the joker was succesfully destroyed, false otherwise (for example, it was eternal or it was already being destroyed)
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
-function __ABC.CalculateUtil:do_joker_destroy(joker, force)
+function __ABC.CalculateUtilJoker:do_joker_destroy(joker, force)
     if joker.getting_sliced or (joker.ability.eternal and not force) then
         return false
     end
@@ -236,10 +254,11 @@ end
 ---
 
 --- Returns other joker cards the player currently has.
+---***
 --- @return SMODS.Joker[] other_jokers List of other jo,kers
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
-function __ABC.CalculateUtil:get_other_jokers()
+function __ABC.CalculateUtilJoker:get_other_jokers()
     local other_jokers = {}
     for i = 1, #G.jokers.cards do
         if G.jokers.cards[i] ~= self.joker_card and not G.jokers.cards[i].getting_sliced then other_jokers[#other_jokers+1] = G.jokers.cards[i] end
@@ -253,7 +272,7 @@ end
 ---
 
 ---@private
-function __ABC.CalculateUtil:__init__(joker_self, joker_card, context, joker_definition)
+function __ABC.CalculateUtilJoker:__init__(joker_self, joker_card, context, joker_definition)
     self.joker_self = joker_self
     self.joker_card = joker_card
     self.context = context
@@ -262,7 +281,7 @@ function __ABC.CalculateUtil:__init__(joker_self, joker_card, context, joker_def
 end
 
 ---@private
-function __ABC.CalculateUtil:_init_vars()
+function __ABC.CalculateUtilJoker:_init_vars()
     -- Using getters and setters instead of function calls to trick autocompletion into working
     local vars_meta = {}
     vars_meta.__index = function(_, varname)
@@ -300,7 +319,7 @@ function __ABC.CalculateUtil:_init_vars()
 end
 
 ---@private
-function __ABC.CalculateUtil:_set_return_value(val)
+function __ABC.CalculateUtilJoker:_set_return_value(val)
     if val ~= nil and self._return_value == nil then
         self._return_value = val
     end
@@ -308,7 +327,7 @@ function __ABC.CalculateUtil:_set_return_value(val)
 end
 
 ---@private
-function __ABC.CalculateUtil:_set_return_table_prop(prop, val)
+function __ABC.CalculateUtilJoker:_set_return_table_prop(prop, val)
     if self._return_value == nil then
         self._return_value = {}
     end

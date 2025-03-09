@@ -8,6 +8,12 @@ function random_choice(options, seed)
     return options[math.random(#options)]
 end
 
+function bind(method, a)
+    return function(...)
+        return method(a, ...)
+    end
+end
+
 -- Compatible with Lua 5.1 (not 5.0).
 function class(base, init)
     local c = {}    -- a new class instance

@@ -17,4 +17,13 @@ ABC.Joker("Evil Red Seal")
             return 0
         end)
     end)
+    :unlock_condition(
+        {"Have at least 10 cards", "with {V:1}#seal#{} in deck"},
+        { seal = ABC.VARS.Seal("red_seal") },
+        function(self, args, ABCU)
+            if args.type == "modify_deck" then
+                return ABCU:get_count_in_deck(bind(ABCU.vars.seal.card_is_exactly, ABCU.vars.seal)) > 10
+            end
+        end
+    )
     :register()

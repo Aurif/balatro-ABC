@@ -59,13 +59,13 @@ end
 ---***
 ---@generic V
 ---@param self ABC.Joker|{__shadow_var_types: V}
----@param calculate fun(self, card, context, ABCU: ABC.CalculateUtil|{vars: V}): any The calculate function. First three parameters (`self`, `card`, `context`) correspond to the definitions from [Steamodded API](https://github.com/Steamodded/smods/wiki/calculate_functions). The fourth parameter is the [CalculateUtil class](https://github.com/Aurif/balatro-ABC/wiki/CalculateUtil) provided by ABC.
+---@param calculate fun(self, card, context, ABCU: ABC.CalculateUtilJoker|{vars: V}): any The calculate function. First three parameters (`self`, `card`, `context`) correspond to the definitions from [Steamodded API](https://github.com/Steamodded/smods/wiki/calculate_functions). The fourth parameter is the [CalculateUtil class](https://github.com/Aurif/balatro-ABC/wiki/CalculateUtil) provided by ABC.
 ---@return ABC.Joker|{__shadow_var_types: V} self for chaining.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:calculate(calculate)
     self.raw.calculate = function(calc_self, card, context)
-        local ABCU = __ABC.CalculateUtil(calc_self, card, context, self)
+        local ABCU = __ABC.CalculateUtilJoker(calc_self, card, context, self)
         ABCU:_set_return_value(calculate(calc_self, card, context, ABCU))
         return ABCU._return_value
     end
@@ -164,12 +164,13 @@ end
 ---
 
 ---Makes the Joker require unlocking and defines the unlock condition.
+---***
 ---@generic J: ABC.Joker
 ---@generic V : {[string]: string|number|ABC.VAR}
 ---@param self J
 ---@param description string[] In-game description of the unlock condition, with each list element being a new line. Has analogical structure to [joker description](https://github.com/Aurif/balatro-ABC/wiki/Joker#descriptiondescription).
 ---@param variables V Variables to use for the unlock condition, mostly useful for localization. Has analogical structure to [joker variables](https://github.com/Aurif/balatro-ABC/wiki/Joker#variablesvariables).
----@param check_for_unlock fun(self, args, variables: V): nil|boolean The check_for_unlock function. If this function returns `true`, the card will become unlocked. The second parameter (`args`) is the context of the check, the third (`variables`) is the dict of variables provided earlier.
+---@param check_for_unlock fun(self, args, ABCU: ABC.CalculateUtilUnlock|{vars: V}): nil|boolean The check_for_unlock function. If this function returns `true`, the card will become unlocked. The second parameter (`args`) is the context of the check, the third (`ABCU`) is the calculate util with variables provided earlier.
 ---@return J self for chaining.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
@@ -182,7 +183,9 @@ function ABC.Joker:unlock_condition(description, variables, check_for_unlock)
     self.raw.locked_loc_vars = __ABC.make_localization_function(variables, function() return __ABC.unwrap_variables(variables) end)
     self.raw.loc_txt.unlock = __ABC.substitute_description_vars(description, variables)
     self.raw.check_for_unlock = function(card_self, args)
-        local should_unlock = check_for_unlock(card_self, args, variables)
+        local ABCU = __ABC.CalculateUtilUnlock()
+        ABCU.vars = variables
+        local should_unlock = check_for_unlock(card_self, args, ABCU)
         if should_unlock then
             unlock_card(card_self)
         end
@@ -192,6 +195,7 @@ end
 
 ---Adds other mods as dependency for this joker.\
 ---(Joker won't be created if those mods aren't present.)
+---***
 ---@generic J: ABC.Joker
 ---@param self J
 ---@param dependencies string[] List of mod ids to set as dependencies.

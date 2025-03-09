@@ -19,9 +19,9 @@ ABC.Joker("Yang")
   :unlock_condition(
       {"Discover the","{C:attention}#other_joker#{} joker."},
       { other_joker = ABC.VARS.Joker("j_ari_rand_yin") },
-      function (self, args, vars)
+      function (self, args, ABCU)
         if args.type == 'discover_amount' then
-            return vars.other_joker:is_discovered()
+            return ABCU.vars.other_joker:is_discovered()
         end
       end
   )
