@@ -22,6 +22,7 @@ ABC.Joker("Checkered Joker")
             end
         end)
     end)
+    :incompat_blueprint()
     :unlock_condition(
         {"Win a run with", "{C:attention}#deck#{}"},
         { deck = ABC.VARS.Deck("b_checkered") },

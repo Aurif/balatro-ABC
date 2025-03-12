@@ -160,6 +160,44 @@ function ABC.Joker:rarity_rare()
 end
 
 ---
+--- Compatibility flags
+---
+
+---Marks this joker as incompatible with blueprint-like jokers.\
+---Will affect the behaviour of [CalculateUtil](https://github.com/Aurif/balatro-ABC/wiki/CalculateUtil) triggers.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
+function ABC.Joker:incompat_blueprint()
+    self.raw.blueprint_compat = false
+    return self
+end
+
+---Prevents this joker from getting the eternal sticker.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+function ABC.Joker:incompat_eternal()
+    self.raw.eternal_compat = false
+    return self
+end
+
+---Prevents this joker from getting the perishable sticker.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+function ABC.Joker:incompat_perishable()
+    self.raw.perishable_compat = false
+    return self
+end
+
+
+---
 --- Advanced
 ---
 
@@ -170,7 +208,7 @@ end
 ---@param self J
 ---@param description string[] In-game description of the unlock condition, with each list element being a new line. Has analogical structure to [joker description](https://github.com/Aurif/balatro-ABC/wiki/Joker#descriptiondescription).
 ---@param variables V Variables to use for the unlock condition, mostly useful for localization. Has analogical structure to [joker variables](https://github.com/Aurif/balatro-ABC/wiki/Joker#variablesvariables).
----@param check_for_unlock fun(self, args, ABCU: ABC.CalculateUtilUnlock|{vars: V}): nil|boolean The check_for_unlock function. If this function returns `true`, the card will become unlocked. The second parameter (`args`) is the context of the check, the third (`ABCU`) is the calculate util with variables provided earlier.
+---@param check_for_unlock fun(self, args, ABCU: ABC.CalculateUtilUnlock|{vars: V}): nil|boolean The check_for_unlock function. If this function returns `true`, the card will become unlocked. The second parameter (`args`) is the context of the check, the third (`ABCU`) is the [CalculateUtil](https://github.com/Aurif/balatro-ABC/wiki/CalculateUtil) with variables provided earlier.
 ---@return J self for chaining.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)

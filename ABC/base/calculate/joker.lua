@@ -26,6 +26,7 @@ __ABC.CalculateUtilJoker = class(__ABC.CalculateUtil)
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 function __ABC.CalculateUtilJoker:on_round_start(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.setting_blind and not self.joker_self.getting_sliced then
         return self:_set_return_value(callback())
     end
@@ -35,6 +36,7 @@ end
 ---***
 --- @param callback fun(): nil Callback to execute
 function __ABC.CalculateUtilJoker:on_round_end(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.end_of_round and not (self.context.individual or self.context.repetition) then
         return self:_set_return_value(callback())
     end
@@ -46,6 +48,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/voucher_joker.lua)
 function __ABC.CalculateUtilJoker:on_round_boss_defeated(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.end_of_round and not (self.context.individual or self.context.repetition) and G.GAME.blind.boss then
         return self:_set_return_value(callback())
     end
@@ -58,6 +61,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/many_jokers.lua)
 function __ABC.CalculateUtilJoker:on_dollar_bonus(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.calc_dollar_bonus then
         return self:_set_return_value(callback())
     end
@@ -74,6 +78,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house.lua)
 function __ABC.CalculateUtilJoker:on_hand_played(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.joker_main then
         return self:_set_return_value(callback(self.context.full_hand))
     end
@@ -86,6 +91,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
 function __ABC.CalculateUtilJoker:on_hand_scored(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.joker_main then
         return self:_set_return_value(callback(self.context.scoring_hand))
     end
@@ -98,6 +104,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 function __ABC.CalculateUtilJoker:on_card_scored(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.individual and self.context.cardarea == G.play then
         return self:_set_return_value(callback(self.context.other_card))
     end
@@ -110,6 +117,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/yin.lua)
 function __ABC.CalculateUtilJoker:on_card_post_scored(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.after and self.context.scoring_hand then
         for i = 1, #self.context.scoring_hand do
             callback(self.context.scoring_hand[i])
@@ -124,6 +132,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/evil_red_seal.lua)
 function __ABC.CalculateUtilJoker:on_card_should_retrigger(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.repetition and self.context.cardarea == G.play then
         local repetition_count = callback(self.context.other_card)
         if not repetition_count or repetition_count <= 0 then
@@ -140,6 +149,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house.lua)
 function __ABC.CalculateUtilJoker:on_hand_discarded(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.pre_discard then
         return self:_set_return_value(callback(self.context.full_hand))
     end
@@ -151,6 +161,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house_alternative.lua)
 function __ABC.CalculateUtilJoker:on_card_discarded(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.discard then
         return self:_set_return_value(callback(self.context.other_card))
     end
@@ -160,6 +171,7 @@ end
 ---***
 --- @param callback fun(drawn_hand: Card[]): nil Callback to execute
 function __ABC.CalculateUtilJoker:on_hand_drawn(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.hand_drawn then
         return self:_set_return_value(callback(self.context.hand_drawn))
     end
@@ -171,6 +183,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house_alternative.lua)
 function __ABC.CalculateUtilJoker:on_card_drawn(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.hand_drawn then
         for i = 1, #self.context.hand_drawn do
             callback(self.context.hand_drawn[i])
@@ -188,6 +201,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/mutually_assured_destruction.lua)
 function __ABC.CalculateUtilJoker:on_self_destroyed(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.selling_self then
         self.joker_card._was_sold = true
     end
@@ -204,6 +218,7 @@ end
 ---***
 --- @param callback fun(): nil Callback to execute
 function __ABC.CalculateUtilJoker:on_shop_exit(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.ending_shop then
         return self:_set_return_value(callback())
     end
@@ -215,6 +230,7 @@ end
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/anaglyph_joker.lua)
 function __ABC.CalculateUtilJoker:on_blind_skipped(callback)
+	if not self:_pre_trigger_check() then return end
     if self.context.skip_blind then
         return self:_set_return_value(callback())
     end
@@ -413,4 +429,10 @@ function __ABC.CalculateUtilJoker:_set_return_table_prop(prop, val)
         error("Couldn't modify return prop \"" .. prop .. "\", a conflicting return value has already been specified earlier")
     end
     self._return_value[prop] = val
+end
+
+---@private
+function __ABC.CalculateUtilJoker:_pre_trigger_check()
+    if self.context.blueprint and not self.joker_self.blueprint_compat then return false end
+    return true
 end

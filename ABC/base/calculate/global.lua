@@ -67,3 +67,14 @@ function __ABC.CalculateUtil:get_count_in_deck(condition)
      + self:get_count_in_hand(condition)
      + self:get_count_in_discard(condition)
 end
+
+
+---
+--- Internal
+---
+
+
+---@private
+function __ABC.CalculateUtil:_pre_trigger_check()
+    return true
+end
