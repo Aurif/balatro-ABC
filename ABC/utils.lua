@@ -100,7 +100,6 @@ function __ABC.substitute_description_vars(description, vars)
 
     local new_description = {}
     for i, line in pairs(description) do
-        print(line)
         for j, k in ipairs(key_order) do
             line = line:gsub("#" .. k .. "#", "#" .. j .. "#")
         end

@@ -45,3 +45,7 @@ function ABC.Animations.modify_card(callback, card, joker_card)
         end
     })
 end
+
+function ABC.Animations.display_text(card, message, colour)
+    card_eval_status_text(card, 'extra', nil, nil, nil, {message = message, colour = colour})
+end

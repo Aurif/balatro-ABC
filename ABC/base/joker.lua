@@ -193,6 +193,21 @@ function ABC.Joker:unlock_condition(description, variables, check_for_unlock)
     return self
 end
 
+---Overwrites joker key with a custom one.\
+---(Useful for avoiding conflicting keys.)
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@param new_key string Key to use for the joker.
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house_alternative.lua)
+function ABC.Joker:key(new_key)
+    self.raw.key = new_key
+    self.meta.full_name = "j_" .. SMODS.current_mod.prefix .. "_" .. new_key
+    return self
+end
+
 ---Adds other mods as dependency for this joker.\
 ---(Joker won't be created if those mods aren't present.)
 ---***
@@ -328,9 +343,8 @@ function ABC.Joker:__init__(name)
     self.meta = {}
     self.listeners = {}
     self.raw.name = name
-    self.raw.key = string.gsub(string.lower(name), "%W", "_")
-    self.raw.loc_txt = { name = self.raw.name }
-    self.meta.full_name = "j_" .. SMODS.current_mod.prefix .. "_" .. self.raw.key
+    self.raw.loc_txt = { name = name }
+    self:key(string.gsub(string.lower(name), "%W", "_"))
 end
 
 ---@private

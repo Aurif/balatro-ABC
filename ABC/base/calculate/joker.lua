@@ -67,6 +67,18 @@ end
 --- Events - cards
 ---
 
+
+--- Triggers when a hand is played.
+---***
+--- @param callback fun(played_hand: Card[]): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house.lua)
+function __ABC.CalculateUtilJoker:on_hand_played(callback)
+    if self.context.joker_main then
+        return self:_set_return_value(callback(self.context.full_hand))
+    end
+end
+
 --- Triggers once during scoring.\
 --- This is where joker-based chips and mult bonuses can be done.
 ---***
@@ -119,6 +131,50 @@ function __ABC.CalculateUtilJoker:on_card_should_retrigger(callback)
         end
         self:_set_return_table_prop("repetitions", repetition_count)
         self:_set_return_table_prop("card", self.joker_card)
+    end
+end
+
+--- Triggers when a hand is discarded.
+---***
+--- @param callback fun(discarded_hand: Card[]): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house.lua)
+function __ABC.CalculateUtilJoker:on_hand_discarded(callback)
+    if self.context.pre_discard then
+        return self:_set_return_value(callback(self.context.full_hand))
+    end
+end
+
+--- Triggers for each discarded card.
+---***
+--- @param callback fun(discarded_card: Card): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house_alternative.lua)
+function __ABC.CalculateUtilJoker:on_card_discarded(callback)
+    if self.context.discard then
+        return self:_set_return_value(callback(self.context.other_card))
+    end
+end
+
+--- Triggers once per each draw.
+---***
+--- @param callback fun(drawn_hand: Card[]): nil Callback to execute
+function __ABC.CalculateUtilJoker:on_hand_drawn(callback)
+    if self.context.hand_drawn then
+        return self:_set_return_value(callback(self.context.hand_drawn))
+    end
+end
+
+--- Triggers for each drawn card.
+---***
+--- @param callback fun(drawn_card: Card): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house_alternative.lua)
+function __ABC.CalculateUtilJoker:on_card_drawn(callback)
+    if self.context.hand_drawn then
+        for i = 1, #self.context.hand_drawn do
+            callback(self.context.hand_drawn[i])
+        end
     end
 end
 
@@ -247,6 +303,28 @@ function __ABC.CalculateUtilJoker:do_joker_destroy(joker, force)
         joker:start_dissolve({G.C.RED}, nil, 1.6)
     return true end }))
     return true
+end
+
+--- Adds a given value to all probabilities.
+---***
+--- @param prob number Value to add to the probabilities.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house_alternative.lua)
+function __ABC.CalculateUtilJoker:do_probability_add(prob)
+    for k, v in pairs(G.GAME.probabilities) do
+        G.GAME.probabilities[k] = math.floor((v+prob)*1000+0.5)/1000
+    end
+end
+
+--- Multiplies all probabilities by a given value.
+---***
+--- @param x_prob number Value to multiply the probabilities by.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/the_house.lua)
+function __ABC.CalculateUtilJoker:do_probability_multiply(x_prob)
+    for k, v in pairs(G.GAME.probabilities) do
+        G.GAME.probabilities[k] = math.floor((v*x_prob)*1000+0.5)/1000
+    end
 end
 
 ---

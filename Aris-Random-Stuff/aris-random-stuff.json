@@ -5,11 +5,11 @@
 	"description": "A random collection of jokers",
 	"author": ["Aurif"],
 	"badge_colour": "feb65c",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"main_file": "main.lua",
 	"dependencies": [
 		"Steamodded (>=1.*)",
 		"Lovely (>=0.6)",
-        "ABC (>=0.1.3)"
+        "ABC (>=0.1.4)"
 	]
 }
