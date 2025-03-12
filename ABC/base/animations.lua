@@ -46,6 +46,20 @@ function ABC.Animations.modify_card(callback, card, joker_card)
     })
 end
 
+function ABC.Animations.jiggle_card(callback, card, joker_card)
+    event({ trigger = 'after', delay = 0.25,
+        func = function()
+            callback()
+            if joker_card then
+                joker_card:juice_up(0.7);
+            end
+            card:juice_up(0.3, 0.3);
+            play_sound('tarot2', 1, 0.6);
+            return true
+        end
+    })
+end
+
 function ABC.Animations.display_text(card, message, colour)
     card_eval_status_text(card, 'extra', nil, nil, nil, {message = message, colour = colour})
 end

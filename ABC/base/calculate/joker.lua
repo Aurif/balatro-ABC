@@ -343,6 +343,42 @@ function __ABC.CalculateUtilJoker:do_probability_multiply(x_prob)
     end
 end
 
+---@alias EnumPermaBonus
+---| '"chips_add"'
+---| '"mult_add"'
+---| '"chips_multiply"'
+---| '"mult_multiply"'
+---| '"chips_add_when_held"'
+---| '"mult_add_when_held"'
+---| '"chips_multiply_when_held"'
+---| '"mult_multiply_when_held"'
+
+local PERMA_BONUS = {
+	chips_add = {key="perma_bonus", default=0},
+    mult_add = {key="perma_mult", default=0},
+    chips_multiply = {key="perma_x_chips", default=1},
+    mult_multiply = {key="perma_x_mult", default=1},
+
+    chips_add_when_held = {key="perma_h_chips", default=0},
+    mult_add_when_held = {key="perma_h_mult", default=0},
+    chips_multiply_when_held = {key="perma_h_x_chips", default=1},
+    mult_multiply_when_held = {key="perma_h_x_mult", default=1},
+}
+
+--- Adds a permanent bonus to a given card.
+---***
+--- @param card Card Card to apply the bonus to.
+--- @param bonus EnumPermaBonus Type of bonus to add, possible values are: `chips_add`, `mult_add`, `chips_multiply`, `mult_multiply`, `chips_add_when_held`, `mult_add_when_held`, `chips_multiply_when_held`, `mult_multiply_when_held`.
+--- @param value number Value to add to the specified permanent bonus.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/rainbow_joker.lua)
+function __ABC.CalculateUtilJoker:do_card_bonus_permanent_add(card, bonus, value)
+    local bonus_data = PERMA_BONUS[bonus]
+    local previous_bonus = card.ability[bonus_data.key]
+    if previous_bonus == nil then previous_bonus = bonus_data.default end
+    card.ability[bonus_data.key] = previous_bonus + value
+end
+
 ---
 --- Getters
 ---

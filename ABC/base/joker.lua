@@ -159,6 +159,28 @@ function ABC.Joker:rarity_rare()
     return self
 end
 
+---Sets rarity of the joker to **legendary**.\
+---Legendary jokers require a two-part sprite.\
+---Automatically sets the default buy price and unlock condition.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/rainbow_joker.lua)
+function ABC.Joker:rarity_legendary()
+    if not self.raw.cost then
+        self.raw.cost = 20
+    end
+    self.raw.rarity = 4
+    self.raw.unlocked = false
+    self.raw.unlock_condition = {hidden = true}
+    self.raw.soul_pos = { x = 1, y = 0 }
+    self.raw.loc_txt.unlock = { "{E:1,s:1.3}?????" }
+
+    return self
+end
+
 ---
 --- Compatibility flags
 ---

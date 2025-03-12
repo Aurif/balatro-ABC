@@ -40,6 +40,16 @@ function ABC.VARS.Suit:card_set(card)
     card:change_suit(self.value)
 end
 
+---Checks if card's suit matches self (including effects like wildcard).
+---***
+---@param card Card Card to check.
+---@return boolean matches True if base card matches this suit, false otherwise.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/rainbow_joker.lua)
+function ABC.VARS.Suit:card_is(card)
+    return card:is_suit(self.value)
+end
+
 ---Checks if card's base suit matches self (without including effects like wildcard).
 ---***
 ---@param card Card Card to check.
