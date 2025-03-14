@@ -118,7 +118,7 @@ end
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 function ABC.Joker:rarity_common()
     if not self.raw.cost then
-        self.raw.cost = random_choice({ 3, 4, 4, 4, 5}, self.meta.full_name)
+        self:cost(random_choice({ 3, 4, 4, 4, 5}, self.meta.full_name))
     end
     self.raw.rarity = 1
 
@@ -135,7 +135,7 @@ end
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/many_jokers.lua)
 function ABC.Joker:rarity_uncommon()
     if not self.raw.cost then
-        self.raw.cost = random_choice({ 5, 6, 7 }, self.meta.full_name)
+        self:cost(random_choice({ 5, 6, 7 }, self.meta.full_name))
     end
     self.raw.rarity = 2
 
@@ -152,7 +152,7 @@ end
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/electrician.lua)
 function ABC.Joker:rarity_rare()
     if not self.raw.cost then
-        self.raw.cost = random_choice({ 8, 8, 8, 9, 10 }, self.meta.full_name)
+        self:cost(random_choice({ 8, 8, 8, 9, 10 }, self.meta.full_name))
     end
     self.raw.rarity = 3
 
@@ -170,7 +170,7 @@ end
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/rainbow_joker.lua)
 function ABC.Joker:rarity_legendary()
     if not self.raw.cost then
-        self.raw.cost = 20
+        self:cost(20)
     end
     self.raw.rarity = 4
     self.raw.unlocked = false
@@ -218,6 +218,25 @@ function ABC.Joker:incompat_perishable()
     return self
 end
 
+
+---
+--- Customization
+---
+
+---Sets the purchase cost of the joker.\
+---Overwrites the default cost from rarity.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@param cost number Cost of the joker.
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/free_joker.lua)
+function ABC.Joker:cost(cost)
+    self.raw.cost = cost
+    self.raw.base_cost = cost
+    return self
+end
 
 ---
 --- Advanced

@@ -2,6 +2,8 @@ ABC = {}
 __ABC = {}
 SMODS.load_file("utils.lua")()
 
+SMODS.load_file("injects/balatro.lua")()
+
 SMODS.load_file("base/vars/_common.lua")()
 SMODS.load_file("base/vars/enhancement.lua")()
 SMODS.load_file("base/vars/probability.lua")()
