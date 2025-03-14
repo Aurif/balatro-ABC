@@ -13,7 +13,7 @@ It is recommended that you visit the ["getting started" part of documentation](h
 
 --- 
 Current library capabilities:
- - creating `common`, `uncommon`, and `rare` jokers
+ - creating `common`, `uncommon`, `rare`, and `legendary` jokers
  - custom unlock conditions
  - [helpful debug functions](https://github.com/Aurif/balatro-ABC/wiki/Joker#debug-functions)
 
