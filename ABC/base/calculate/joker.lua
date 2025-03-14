@@ -120,7 +120,7 @@ function __ABC.CalculateUtilJoker:on_card_post_scored(callback)
 	if not self:_pre_trigger_check() then return end
     if self.context.after and self.context.scoring_hand then
         for i = 1, #self.context.scoring_hand do
-            callback(self.context.scoring_hand[i])
+            self:_set_return_value(callback(self.context.scoring_hand[i]))
         end
     end
 end
@@ -186,7 +186,7 @@ function __ABC.CalculateUtilJoker:on_card_drawn(callback)
 	if not self:_pre_trigger_check() then return end
     if self.context.hand_drawn then
         for i = 1, #self.context.hand_drawn do
-            callback(self.context.hand_drawn[i])
+            self:_set_return_value(callback(self.context.hand_drawn[i]))
         end
     end
 end
@@ -449,7 +449,10 @@ function __ABC.CalculateUtilJoker:_init_vars()
 end
 
 ---@private
-function __ABC.CalculateUtilJoker:_set_return_value(val)
+function __ABC.CalculateUtilJoker:_set_return_value(val, extra)
+    if not extra or not extra.silent then
+        self._triggered = true
+    end
     if val ~= nil and self._return_value == nil then
         self._return_value = val
     end

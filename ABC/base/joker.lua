@@ -66,8 +66,8 @@ end
 function ABC.Joker:calculate(calculate)
     self.raw.calculate = function(calc_self, card, context)
         local ABCU = __ABC.CalculateUtilJoker(calc_self, card, context, self)
-        ABCU:_set_return_value(calculate(calc_self, card, context, ABCU))
-        return ABCU._return_value
+        ABCU:_set_return_value(calculate(calc_self, card, context, ABCU), {silent=true})
+        return ABCU._return_value, ABCU._triggered
     end
     self.raw.calc_dollar_bonus = function(calc_self, card)
         return self.raw.calculate(calc_self, card, {calc_dollar_bonus=true})
