@@ -23,14 +23,8 @@ ABC.VARS.Tag = classABCVar("Tag")
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/anaglyph_joker.lua)
 function ABC.VARS.Tag:random(seed)
-    local _pool, _pool_key = get_current_pool('Tag')
-    local _real_pool = {}
-    for k, v in pairs(_pool) do
-        if v ~= "UNAVAILABLE" then
-            table.insert(_real_pool, v)
-        end
-    end
-    local _tag = pseudorandom_element(_real_pool, seed)
+    local _pool, _pool_key = get_current_pool_filtered('Tag')
+    local _tag = pseudorandom_element(_pool, seed)
     return ABC.VARS.Tag(_tag)
 end
 

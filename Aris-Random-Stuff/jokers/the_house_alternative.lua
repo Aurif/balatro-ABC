@@ -5,7 +5,7 @@
 
 ABC.Joker("The House?")
   :key("the_house_alternative")
-  :description({"On hand played", "probabilities {C:green,E:1,S:1.1}+#prob_increase#{},", "on hand discarded", "probabilities {C:green,E:1,S:1.1}-#prob_decrease#{}"})
+  :description({"On card drawn", "probabilities {C:green,E:1,S:1.1}+#prob_increase#{},", "on card discarded", "probabilities {C:green,E:1,S:1.1}-#prob_decrease#{}"})
   :rarity_rare()
   :variables({
     prob_increase = 0.1,

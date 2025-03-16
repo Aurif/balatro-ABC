@@ -14,6 +14,17 @@ function bind(method, a)
     end
 end
 
+function get_current_pool_filtered(_type, _rarity, _legendary, _append)
+    local _pool, _pool_key = get_current_pool(_type, _rarity, _legendary, _append)
+    local _real_pool = {}
+    for k, v in pairs(_pool) do
+        if v ~= "UNAVAILABLE" then
+            table.insert(_real_pool, v)
+        end
+    end
+    return _real_pool, _pool_key
+end
+
 -- Compatible with Lua 5.1 (not 5.0).
 function class(base, init)
     local c = {}    -- a new class instance
