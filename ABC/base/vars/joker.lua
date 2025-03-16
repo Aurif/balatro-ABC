@@ -20,7 +20,14 @@ ABC.VARS.Joker = classABCVar("Joker")
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/placeholder_joker.lua)
 function ABC.VARS.Joker:spawn()
-    if #G.jokers.cards < G.jokers.config.card_limit then
+    local joker_count = 0
+    for _, v in pairs(G.jokers.cards) do
+        if not v.getting_sliced then
+            joker_count = joker_count + 1
+        end
+    end
+
+    if joker_count < G.jokers.config.card_limit then
         play_sound('timpani')
         local card = create_card('Joker', G.jokers, nil, nil, nil, nil, self.value)
         card:add_to_deck()

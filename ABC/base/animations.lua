@@ -61,5 +61,6 @@ function ABC.Animations.jiggle_card(callback, card, joker_card)
 end
 
 function ABC.Animations.display_text(card, message, colour)
+    message = tostring(message)
     card_eval_status_text(card, 'extra', nil, nil, nil, {message = message, colour = colour})
 end

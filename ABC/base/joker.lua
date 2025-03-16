@@ -75,6 +75,17 @@ function ABC.Joker:calculate(calculate)
     self.raw.remove_from_deck = function(calc_self, card)
         return self.raw.calculate(calc_self, card, {remove_from_deck=true})
     end
+    self.raw.set_ability = function(calc_self, card)
+        return self.raw.calculate(calc_self, card, {set_ability=true})
+    end
+    self.raw.set_sprites = function(calc_self, card)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                self.raw.calculate(calc_self, card, {set_sprites=true})
+                return true
+            end
+        }))
+    end
 
     return self
 end
@@ -203,6 +214,8 @@ end
 ---@generic J: ABC.Joker
 ---@param self J
 ---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/placeholder_joker.lua)
 function ABC.Joker:incompat_eternal()
     self.raw.eternal_compat = false
     return self
@@ -213,6 +226,8 @@ end
 ---@generic J: ABC.Joker
 ---@param self J
 ---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/buffering_joker.lua)
 function ABC.Joker:incompat_perishable()
     self.raw.perishable_compat = false
     return self

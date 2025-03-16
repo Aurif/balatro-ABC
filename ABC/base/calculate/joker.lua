@@ -195,6 +195,33 @@ end
 --- Events - joker
 ---
 
+--- Triggers before this card is spawned.\
+--- If you want to add persistent randomly-initialized variables, this is the place.
+---***
+--- @param callback fun(): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/buffering_joker.lua)
+function __ABC.CalculateUtilJoker:on_self_setup(callback)
+	if not self:_pre_trigger_check() then return end
+    if self.context.set_ability then
+        return self:_set_return_value(callback())
+    end
+end
+
+--- Triggers when this card is first rendered.\
+--- Can be used for dynamic variable-based sprite modifications.
+---***
+--- @param callback fun(): nil Callback to execute
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/buffering_joker.lua)
+function __ABC.CalculateUtilJoker:on_self_sprite_init(callback)
+	if not self:_pre_trigger_check() then return end
+    if self.context.set_sprites then
+        return self:_set_return_value(callback())
+    end
+end
+
+
 --- Triggers when this joker card is destroyed or sold.
 ---***
 --- @param callback fun(is_sold: boolean): nil Callback to execute
@@ -321,6 +348,25 @@ function __ABC.CalculateUtilJoker:do_joker_destroy(joker, force)
     return true
 end
 
+--- Self-destructs this joker.
+---***
+--- @return boolean was_destroyed True if the joker was succesfully destroyed, false otherwise (for example, it was eternal or it was already being destroyed)
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/buffering_joker.lua)
+function __ABC.CalculateUtilJoker:do_self_destroy()
+    return self:do_joker_destroy(self.joker_card, true)
+end
+
+--- Changes the sprite of this joker.\
+--- This is temporary! Use in combination with [`on_self_sprite_init`](https://github.com/Aurif/balatro-ABC/wiki/CalculateUtil#on_self_sprite_initcallback) for permanent changes.
+---***
+--- @param pos table Position in atlas to change the sprite to, in the format of `{x: 0, y: 0}`.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/buffering_joker.lua)
+function __ABC.CalculateUtilJoker:do_self_sprite_change(pos)
+    self.joker_card.children.center:set_sprite_pos(pos)
+end
+
 --- Adds a given value to all probabilities.
 ---***
 --- @param prob number Value to add to the probabilities.
@@ -438,7 +484,7 @@ function __ABC.CalculateUtilJoker:_init_vars()
                 .. " but got " .. tostring(value)
             )
         end
-        if value.value then
+        if type(value) == "table" and value.value then
             value = value.value
         end
         self.joker_card.ability.extra[varname] = value
