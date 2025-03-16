@@ -14,6 +14,7 @@ SMODS.load_file("base/vars/joker.lua")()
 SMODS.load_file("base/vars/challenge.lua")()
 SMODS.load_file("base/vars/seal.lua")()
 SMODS.load_file("base/vars/rarity.lua")()
+SMODS.load_file("base/vars/poker_hand.lua")()
 
 SMODS.load_file("base/calculate/global.lua")()
 SMODS.load_file("base/calculate/joker.lua")()
