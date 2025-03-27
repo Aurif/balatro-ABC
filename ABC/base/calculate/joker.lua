@@ -329,6 +329,17 @@ function __ABC.CalculateUtilJoker:do_chips_multiply(x_chips)
     self:_set_return_table_prop("card", self.joker_card)
 end
 
+--- Increases the sell value of the given joker.
+---***
+--- @param joker SMODS.Joker Joker to increase the sell value of.
+--- @param amount integer Amount by which to increase the sell value.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/egg_ascended.lua)
+function __ABC.CalculateUtilJoker:do_joker_sell_value_add(joker, amount)
+    joker.ability.extra_value = joker.ability.extra_value + amount
+    joker:set_cost()
+end
+
 --- Destroys a given joker.
 ---***
 --- @param joker SMODS.Joker Joker to destroy.
