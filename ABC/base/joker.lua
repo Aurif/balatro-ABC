@@ -320,7 +320,20 @@ end
 --- Notes
 ---
 
----Adds a note crediting the artist of the joker's original sprite.
+---Adds a note crediting the artist of the joker's sprite.
+---***
+---@generic J: ABC.Joker
+---@param self J
+---@param artist string Name of the artist to credit
+---@return J self for chaining.
+---***
+---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/protogen.lua)
+function ABC.Joker:credit_art(artist)
+    table.insert(self.raw.loc_txt.text, "{C:inactive}Art by {C:green,E:1,S:1.1}" .. artist)
+    return self
+end
+
+---Adds a note crediting the artist of the joker's original sprite (in case of derived sprites).
 ---***
 ---@generic J: ABC.Joker
 ---@param self J

@@ -50,7 +50,6 @@ function ABC.VARS.Joker:spawn(modifiers)
         end
     end
 
-    print(joker_count, G.jokers.config.card_limit, is_negative)
     if joker_count < G.jokers.config.card_limit or is_negative then
         local card = create_card('Joker', G.jokers, nil, nil, nil, nil, self.value)
         for _, mod in pairs(modifiers or {}) do
