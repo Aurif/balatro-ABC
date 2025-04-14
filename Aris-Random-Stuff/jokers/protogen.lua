@@ -4,7 +4,7 @@
 ---
 
 ABC.Joker("Protogen")
-  :description({"Every round, create", "a {C:attention}#edition#{} Tarot card"})
+  :description({"Every round, create", "a {C:dark_edition}#edition#{} Tarot card"})
   :variables({
     edition=ABC.VARS.Edition("e_negative")
   })

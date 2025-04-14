@@ -76,19 +76,33 @@ function __ABC.make_localization_function(vars_definition, value_getter)
     end
     table.sort(key_order)
 
-    return function(_1, _2, _3)
-        local values = value_getter(_1, _2, _3)
+    return function(_1, info_queue, _3)
+        local values = value_getter(_1, info_queue, _3)
         local loc_vars = {}
         for _, k in ipairs(key_order) do
             if var_wrappers[k] and var_wrappers[k]._localize then
                 local wrapper = var_wrappers[k]
                 local localization = wrapper(values[k]):_localize()
                 table.insert(loc_vars, localization.text)
+
                 for extra_k, extra_v in pairs(localization.extra or {}) do
                     if not loc_vars[extra_k] then
                         loc_vars[extra_k] = {}
                     end
                     table.insert(loc_vars[extra_k], extra_v)
+                end
+
+                if localization.info_queue then
+                    local already_in_queue = false
+                    for _, v in pairs(info_queue) do
+                        if v == localization.info_queue then
+                            already_in_queue = true
+                            break
+                        end
+                    end
+                    if not already_in_queue then
+                        info_queue[#info_queue + 1] = localization.info_queue
+                    end
                 end
             else
                 table.insert(loc_vars, values[k])

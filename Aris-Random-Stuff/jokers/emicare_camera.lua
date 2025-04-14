@@ -4,7 +4,7 @@
 ---
 
 ABC.Joker("Emicare Camera")
-    :description({ "When destroyed, create a", "{C:attention}#edition#{} and {V:1}#sticker#{} copy", "of all other jokers" })
+    :description({ "When destroyed, create a", "{C:dark_edition}#edition#{} and {V:1}#sticker#{} copy", "of all other jokers" })
     :variables({
         edition = ABC.VARS.Edition("e_negative"),
         sticker = ABC.VARS.Sticker("eternal"),

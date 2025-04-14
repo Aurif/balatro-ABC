@@ -29,6 +29,7 @@ end
 ---@private
 function ABC.VARS.Edition:_localize()
     return {
-        text=localize{ type = 'name_text', set = 'Edition', key = self.value }
+        text=localize{ type = 'name_text', set = 'Edition', key = self.value },
+        info_queue=G.P_CENTERS[self.value]
     }
 end
