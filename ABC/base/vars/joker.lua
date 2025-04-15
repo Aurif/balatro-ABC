@@ -16,6 +16,17 @@
 ---@overload fun(value: string|SMODS.Joker): ABC.VARS.Joker
 ABC.VARS.Joker = classABCVar("Joker")
 
+
+---Returns a random joker from those present in the pool.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.Joker joker Randomly picked joker.
+function ABC.VARS.Joker:random(seed)
+    local _pool, _pool_key = get_current_pool_filtered('Joker')
+    local _el = pseudorandom_element(_pool, seed)
+    return ABC.VARS.Joker(_el)
+end
+
 ---@private
 function ABC.VARS.Joker:__parse(value)
     if type(value) ~= "table" then

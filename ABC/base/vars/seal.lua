@@ -15,6 +15,16 @@
 ---@overload fun(value: string): ABC.VARS.Seal
 ABC.VARS.Seal = classABCVar("Seal")
 
+
+---Returns a random seal from those present in the pool.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.Seal seal Randomly picked seal.
+function ABC.VARS.Seal:random(seed)
+    local seal = SMODS.poll_seal({ guaranteed = true, key = tostring(seed) }):lower() .. "_seal"
+    return ABC.VARS.Seal(seal)
+end
+
 ---Checks if card has given seal.
 ---***
 ---@param card Card Card to check.

@@ -18,7 +18,7 @@ ABC.VARS.Tarot = classABCVar("Tarot")
 ---Returns a random tarot card from those present in the pool.
 ---***
 ---@param seed number Seed to use for rng.
----@return ABC.VARS.Tarot tag Randomly picked tag.
+---@return ABC.VARS.Tarot tarot Randomly picked tarot card.
 ---***
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/protogen.lua)
 function ABC.VARS.Tarot:random(seed)

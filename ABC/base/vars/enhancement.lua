@@ -15,6 +15,17 @@
 ---@overload fun(value: string): ABC.VARS.Enhancement
 ABC.VARS.Enhancement = classABCVar("Enhancement")
 
+
+---Returns a random enhancement from those present in the pool.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.Enhancement enhancement Randomly picked enhancement.
+function ABC.VARS.Enhancement:random(seed)
+    local _pool, _pool_key = get_current_pool_filtered('Enhanced')
+    local _el = pseudorandom_element(_pool, seed)
+    return ABC.VARS.Enhancement(_el)
+end
+
 ---Sets enhancement of provided card to self.
 ---***
 ---@param card Card Card which will be changed.

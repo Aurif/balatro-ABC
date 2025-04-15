@@ -37,6 +37,7 @@ function ABC.Joker:variables(variables)
     self.raw.loc_vars = __ABC.make_localization_function(variables, function(_, _, card) return card.ability.extra end)
     self.raw.config = {}
     self.raw.config.extra, self.meta.var_wrappers = __ABC.unwrap_variables(variables)
+    __ABC.VARIABLE_TYPE_DEFS[self.meta.full_name] = self.meta.var_wrappers
 
     return self
 end

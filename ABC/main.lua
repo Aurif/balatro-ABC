@@ -1,5 +1,6 @@
 ABC = {}
 __ABC = {}
+__ABC.VARIABLE_TYPE_DEFS = {}
 SMODS.load_file("utils.lua")()
 
 SMODS.load_file("injects/balatro.lua")()

@@ -15,6 +15,15 @@
 ---@overload fun(value: string): ABC.VARS.Edition
 ABC.VARS.Edition = classABCVar("Edition")
 
+---Returns a random edition from those present in the pool.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.Edition edition Randomly picked edition.
+function ABC.VARS.Edition:random(seed)
+    local _pool, _pool_key = get_current_pool_filtered('Edition')
+    local _el = pseudorandom_element(_pool, seed)
+    return ABC.VARS.Edition(_el)
+end
 
 ---Sets edition of provided card to self.
 ---***

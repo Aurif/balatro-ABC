@@ -16,6 +16,21 @@
 ABC.VARS.PokerHand = classABCVar("PokerHand")
 
 
+---Returns a random poker hand from visible ones.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.PokerHand poker_hand Randomly picked poker hand.
+function ABC.VARS.PokerHand:random(seed)
+    local _pool = {}
+    for _, v in pairs(G.handlist) do
+        if G.GAME.hands[v].visible then
+            table.insert(_pool, v)
+        end
+    end
+    local _el = pseudorandom_element(_pool, seed)
+    return ABC.VARS.PokerHand(_el)
+end
+
 ---Returns true if provided set of cards contains this poker hand.\
 ---Example: `Two Pair` contains `Two Pair`, `Pair`, and `High Card`.
 ---***

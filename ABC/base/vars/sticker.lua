@@ -15,6 +15,18 @@
 ---@overload fun(value: string): ABC.VARS.Sticker
 ABC.VARS.Sticker = classABCVar("Sticker")
 
+---Returns a random sticker.
+---***
+---@param seed number Seed to use for rng.
+---@return ABC.VARS.Sticker sticker Randomly picked sticker.
+function ABC.VARS.Sticker:random(seed)
+    local _pool = {}
+    for k, _ in pairs(SMODS.Stickers) do
+        table.insert(_pool, k)
+    end
+    local _el = pseudorandom_element(_pool, seed)
+    return ABC.VARS.Sticker(_el)
+end
 
 ---Sets sticker of provided card to self, only if the card is compatible with it.
 ---***
