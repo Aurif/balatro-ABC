@@ -27,7 +27,7 @@ __ABC.CalculateUtilJoker = class(__ABC.CalculateUtil)
 ---[Example usage](https://github.com/Aurif/balatro-ABC/blob/main/Aris-Random-Stuff/jokers/checkered_joker.lua)
 function __ABC.CalculateUtilJoker:on_round_start(callback)
 	if not self:_pre_trigger_check() then return end
-    if self.context.setting_blind and not self.joker_self.getting_sliced then
+    if self.context.setting_blind and not self.joker_card.getting_sliced then
         return self:_set_return_value(callback())
     end
 end
@@ -232,7 +232,7 @@ function __ABC.CalculateUtilJoker:on_self_destroyed(callback)
     if self.context.selling_self then
         self.joker_card._was_sold = true
     end
-    if self.context.remove_from_deck then
+    if self.context.remove_from_deck and (self.joker_card.getting_sliced or self.joker_card._was_sold) then
         return self:_set_return_value(callback(self.joker_card._was_sold))
     end
 end
